@@ -51,7 +51,7 @@ function check_dependencies() {
 	if ( get_transient( 'spaces_global_tags_not_multisite' ) ) {
 		?>
 		<div class="notice-error notice is-dismissible">
-			<p><?php _ex( 'This plugin needs to be run on a WordPress multisite installation.', 'network admin notice on activation', 'spaces-global-tags' ); ?></p>
+			<p><?php echo esc_html_x( 'This plugin needs to be run on a WordPress multisite installation.', 'network admin notice on activation', 'spaces-global-tags' ); ?></p>
 		</div>
 		<?php
 		delete_transient( 'spaces_global_tags_not_multisite' );
@@ -60,7 +60,7 @@ function check_dependencies() {
 	if ( get_transient( 'spaces_global_tags_missing_dependency' ) ) {
 		?>
 		<div class="notice-error notice is-dismissible">
-			<p><?php _ex( 'This plugin needs the True Multisite Indexer plugin to work properly.', 'network admin notice on activation', 'spaces-global-tags' ); ?></p>
+			<p><?php echo esc_html_x( 'This plugin needs the True Multisite Indexer plugin to work properly.', 'network admin notice on activation', 'spaces-global-tags' ); ?></p>
 		</div>
 		<?php
 		delete_transient( 'spaces_global_tags_missing_dependency' );
