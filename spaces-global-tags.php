@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.1.0
+ * Version:         0.2.0
  *
  * @package         Spaces_Global_Tags
  */
@@ -27,10 +27,21 @@ register_activation_hook( __FILE__, __NAMESPACE__ . '\plugin_activate' );
 /**
  * Plugin activation hook.
  * Checks if it's a multiste and the necessary dependencies exist.
+ * Adds a check to flush the rewrite rules in the system.
  *
  * @since 0.1.0
  */
 function plugin_activate() {
+
+	/**
+	 * Set a flag to flush rewrite rules.
+	 *
+	 * @since 0.2.0
+	 */
+	if ( ! get_option( 'spaces_global_tags_flush_rewrite_rules_flag' ) ) {
+		add_option( 'spaces_global_tags_flush_rewrite_rules_flag', true );
+	}
+
 	if ( ! is_multisite() ) {
 		set_transient( 'spaces_global_tags_not_multisite', true, 5 );
 	}
@@ -69,9 +80,53 @@ function check_dependencies() {
 
 add_action( 'network_admin_notices', __NAMESPACE__ . '\check_dependencies' );
 
+
+/**
+ * Flush rewrite rules if the previously added flag exists,
+ * and then remove the flag.
+ *
+ * @since 0.2.0
+ */
+function flush_rewrite_rules_maybe() {
+	if ( get_option( 'spaces_global_tags_flush_rewrite_rules_flag' ) ) {
+		flush_rewrite_rules();
+		delete_option( 'spaces_global_tags_flush_rewrite_rules_flag' );
+	}
+}
+
+add_action( 'init', __NAMESPACE__ . '\flush_rewrite_rules_maybe', 20 );
+
+/**
+ * Add custom rewrite rules.
+ *
+ * @since 0.2.0
+ */
+function add_rewrite_rules() {
+	add_rewrite_tag( '%global-tag%', '([^&]+)' );
+	add_rewrite_rule( '^global-tag/([^/]*)/?', 'index.php?global-tag=$matches[1]', 'top' );
+}
+
+add_action( 'init', __NAMESPACE__ . '\add_rewrite_rules' );
+
+/**
+ * Add custom query vars for global tags.
+ *
+ * @since 0.2.0
+ *
+ * @param array $vars Available query vars.
+ */
+function add_query_vars( $vars ) {
+	$vars[] = 'global-tag';
+	return $vars;
+}
+
+add_filter( 'query_vars', __NAMESPACE__ . '\add_query_vars' );
+
 /**
  * A dummy template tag to display posts according to a tag.
  * This is just to play with the possibilites.
+ *
+ * @since 0.1.0
  *
  * @param string $tag_slug A slug for a tag.
  */
