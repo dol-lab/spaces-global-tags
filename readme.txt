@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.2.2
-Stable tag: 0.3.0
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,9 @@ Can be turned on in the True Multisite Indexer plugin options.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.4.0 =
+Moved uninstall flush_rewrite_rules to deactivation hook.
 
 = 0.3.0 =
 Implemented an uninstall.php file with a class to truly uninstall the plugin.
