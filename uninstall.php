@@ -45,9 +45,6 @@ class Spaces_Global_Tags_Uninstaller {
 
 		// Uninstall Spaces_Global_Tags.
 		self::clean_options();
-
-		// Flush the rewrite rules.
-		self::flush_rewrite_rules();
 	}
 
 	/**
@@ -67,20 +64,6 @@ class Spaces_Global_Tags_Uninstaller {
 		delete_transient( 'spaces_global_tags_not_multisite' );
 		delete_transient( 'spaces_global_tags_missing_dependency' );
 
-	}
-
-	/**
-	 * Flush rewrite rules on uninstall.
-	 *
-	 * Flushes the rewrite rules on the main site to make sure
-	 * no traces are kept.
-	 *
-	 * @since 0.3.0
-	 * @return void
-	 */
-	protected static function flush_rewrite_rules() {
-
-		flush_rewrite_rules();
 	}
 
 	/**

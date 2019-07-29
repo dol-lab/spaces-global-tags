@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.3.0
+ * Version:         0.4.0
  *
  * @package         Spaces_Global_Tags
  */
@@ -25,7 +25,15 @@ namespace Spaces_Global_Tags;
 register_activation_hook( __FILE__, __NAMESPACE__ . '\plugin_activate' );
 
 /**
+ * Register our custom deactivation hook.
+ *
+ * @since 0.4.0
+ */
+register_deactivation_hook( __FILE__, __NAMESPACE__ . '\plugin_deactivate' );
+
+/**
  * Plugin activation hook.
+ *
  * Checks if it's a multiste and the necessary dependencies exist.
  * Adds a check to flush the rewrite rules in the system.
  *
@@ -52,7 +60,18 @@ function plugin_activate() {
 }
 
 /**
+ * Plugin deactivation hook.
+ *
+ * @since 0.4.0
+ */
+function plugin_deactivate() {
+
+	flush_rewrite_rules();
+}
+
+/**
  * Checks if during activation any transients were set.
+ *
  * Adds dismissable error notices, in case it's not a
  * multisite or the necessary dependencies don't exists.
  *
