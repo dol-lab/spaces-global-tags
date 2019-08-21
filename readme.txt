@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.2.2
-Stable tag: 0.4.0
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,11 +31,14 @@ No.
 
 = Is there a global search available =
 
-Can be turned on in the True Multisite Indexer plugin options.
+No.
 
 == Screenshots ==
 
 == Changelog ==
+
+= 0.5.0 =
+Started re-build on Multisite Taxonomies plugin.
 
 = 0.4.0 =
 Moved uninstall flush_rewrite_rules to deactivation hook.
