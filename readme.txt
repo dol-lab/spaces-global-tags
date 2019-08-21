@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.2.2
-Stable tag: 0.5.0
+Stable tag: 0.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,11 @@ No.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.6.0 =
+Remove `post_tag` from `post` object.
+Add `global_post_tag` to `post` object.
+Add `global_comment_tag` to `post` object.
 
 = 0.5.0 =
 Started re-build on Multisite Taxonomies plugin.

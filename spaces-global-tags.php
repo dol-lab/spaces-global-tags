@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.5.0
+ * Version:         0.6.0
  *
  * @package         Spaces_Global_Tags
  */
@@ -116,4 +116,98 @@ function flush_rewrite_rules_maybe() {
 }
 
 add_action( 'init', __NAMESPACE__ . '\flush_rewrite_rules_maybe', 20 );
+
+/**
+ * Unregister regular `post_tag` for `post` object type.
+ *
+ * @since 0.6.0
+ */
+function unregister_post_tag_taxonomy_for_post() {
+	unregister_taxonomy_for_object_type( 'post_tag', 'post' );
+}
+add_action( 'init', __NAMESPACE__ . '\unregister_post_tag_taxonomy_for_post' );
+
+/**
+ * Registers `global_post_tag` taxonomy.
+ *
+ * @sicne 0.6.0
+ */
+function register_global_post_tag_taxonomy() {
+	/**
+	 * Load taxonomy for Tags
+	 */
+	$labels     = [
+		'name'                       => __( 'Post Tags', 'spaces-global-tags' ),
+		'singular_name'              => __( 'Post Tag', 'spaces-global-tags' ),
+		'menu_name'                  => __( 'Post Tags', 'spaces-global-tags' ),
+		'all_items'                  => __( 'All Post Tags', 'spaces-global-tags' ),
+		'new_item_name'              => __( 'New Post Tag Name', 'spaces-global-tags' ),
+		'add_new_item'               => __( 'Add New Post Tag', 'spaces-global-tags' ),
+		'edit_item'                  => __( 'Edit Post Tag', 'spaces-global-tags' ),
+		'update_item'                => __( 'Update Post Tag', 'spaces-global-tags' ),
+		'view_item'                  => __( 'View Post Tag', 'spaces-global-tags' ),
+		'separate_items_with_commas' => __( 'Separate post tags with commas', 'spaces-global-tags' ),
+		'add_or_remove_items'        => __( 'Add or remove post tags', 'spaces-global-tags' ),
+		'choose_from_most_used'      => __( 'Choose from the most used post tags', 'spaces-global-tags' ),
+		'popular_items'              => __( 'Popular Post Tags', 'spaces-global-tags' ),
+		'search_items'               => __( 'Search Post Tags', 'spaces-global-tags' ),
+		'not_found'                  => __( 'No Post Tags Found', 'spaces-global-tags' ),
+		'no_terms'                   => __( 'No post tags for this category', 'spaces-global-tags' ),
+		'most_used'                  => __( 'Most Used', 'spaces-global-tags' ),
+		'items_list'                 => __( 'Post Tags list', 'spaces-global-tags' ),
+		'items_list_navigation'      => __( 'Post Tags list navigation', 'spaces-global-tags' ),
+	];
+
+	$args       = [
+		'labels'       => $labels,
+		'hierarchical' => false,
+	];
+
+	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
+	register_multisite_taxonomy( 'global_post_tag', $post_types, $args );
+}
+
+add_action( 'init', __NAMESPACE__ . '\register_global_post_tag_taxonomy', 0 );
+
+/**
+ * Registers `global_comment_tag` taxonomy.
+ *
+ * @sicne 0.6.0
+ */
+function register_global_comment_tag_taxonomy() {
+	/**
+	 * Load taxonomy for Tags
+	 */
+	$labels     = [
+		'name'                       => __( 'Comment Tags', 'spaces-global-tags' ),
+		'singular_name'              => __( 'Comment Tag', 'spaces-global-tags' ),
+		'menu_name'                  => __( 'Comment Tags', 'spaces-global-tags' ),
+		'all_items'                  => __( 'All Comment Tags', 'spaces-global-tags' ),
+		'new_item_name'              => __( 'New Comment Tag Name', 'spaces-global-tags' ),
+		'add_new_item'               => __( 'Add New Comment Tag', 'spaces-global-tags' ),
+		'edit_item'                  => __( 'Edit Comment Tag', 'spaces-global-tags' ),
+		'update_item'                => __( 'Update Comment Tag', 'spaces-global-tags' ),
+		'view_item'                  => __( 'View Comment Tag', 'spaces-global-tags' ),
+		'separate_items_with_commas' => __( 'Separate comment tags with commas', 'spaces-global-tags' ),
+		'add_or_remove_items'        => __( 'Add or remove comment tags', 'spaces-global-tags' ),
+		'choose_from_most_used'      => __( 'Choose from the most used comment tags', 'spaces-global-tags' ),
+		'popular_items'              => __( 'Popular Comment Tags', 'spaces-global-tags' ),
+		'search_items'               => __( 'Search Comment Tags', 'spaces-global-tags' ),
+		'not_found'                  => __( 'No Comment Tags Found', 'spaces-global-tags' ),
+		'no_terms'                   => __( 'No comment tags for this category', 'spaces-global-tags' ),
+		'most_used'                  => __( 'Most Used', 'spaces-global-tags' ),
+		'items_list'                 => __( 'Comment Tags list', 'spaces-global-tags' ),
+		'items_list_navigation'      => __( 'Comment Tags list navigation', 'spaces-global-tags' ),
+	];
+
+	$args       = [
+		'labels'       => $labels,
+		'hierarchical' => false,
+	];
+
+	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
+	register_multisite_taxonomy( 'global_comment_tag', $post_types, $args );
+}
+
+add_action( 'init', __NAMESPACE__ . '\register_global_comment_tag_taxonomy', 0 );
 
