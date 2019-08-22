@@ -2,12 +2,13 @@
 /**
  * Plugin Name:     Spaces Global Tags
  * Plugin URI:      https://github.com/dol-lab/spaces-global-tags/
- * Description:     WIP: Do not use yet. Experimental plugin to play around with True Multisite Indexer.
+ * Description:     WIP: Do not use yet. Experimental plugin to play around with Multisite Taxonomies.
  * Author:          Silvan Hagen
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.6.0
+ * Version:         0.7.0
+ * Network:         true
  *
  * @package         Spaces_Global_Tags
  */
@@ -17,6 +18,9 @@
  */
 namespace Spaces_Global_Tags;
 
+/**
+ * Dependency check.
+ */
 use Multitaxo_Plugin;
 
 /**
