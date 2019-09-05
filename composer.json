@@ -1,0 +1,26 @@
+{
+    "name": "dol-lab/spaces-global-tags",
+    "type":         "wordpress-plugin",
+    "license":      "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Silvan Hagen",
+            "email": "silvan@silvanhagen.com,",
+            "homepage": "https://silvanhagen.com",
+            "role":     "Developer"
+        }
+    ],
+    "keywords": [
+      "wordpress",
+      "taxonomies",
+      "multisite"
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "Spaces_Global_Tags\\": "classes"
+      }
+    }
+}
