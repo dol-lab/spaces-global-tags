@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.7.0
+ * Version:         0.8.0
  * Network:         true
  *
  * @package         Spaces_Global_Tags
@@ -17,6 +17,8 @@
  * Namespace Definition.
  */
 namespace Spaces_Global_Tags;
+
+require __DIR__ . '/vendor/autoload.php';
 
 /**
  * Dependency check.
@@ -169,6 +171,8 @@ function register_global_post_tag_taxonomy() {
 
 	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
 	register_multisite_taxonomy( 'global_post_tag', $post_types, $args );
+
+	new Post_Tags();
 }
 
 add_action( 'init', __NAMESPACE__ . '\register_global_post_tag_taxonomy', 0 );
@@ -211,7 +215,11 @@ function register_global_comment_tag_taxonomy() {
 
 	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
 	register_multisite_taxonomy( 'global_comment_tag', $post_types, $args );
+
+	new Comment_Tags();
 }
 
 add_action( 'init', __NAMESPACE__ . '\register_global_comment_tag_taxonomy', 0 );
+
+
 

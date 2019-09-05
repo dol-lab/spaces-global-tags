@@ -16,6 +16,13 @@ abstract class Hashtag_Parser {
 	 */
 	const TAGS_REGEX = '/(?:^|\s|>|\()#(?!\d{1,2}(?:$|\s|<|\)|\p{P}{1}\s))([\p{L}\p{N}\_\-\.]*[\p{L}\p{N}]+)(?:$|\b|\s|<|\))/iu';
 
+	/**
+	 * Find tags in a string.
+	 *
+	 * @param $content
+	 *
+	 * @return mixed|void
+	 */
 	static function find_tags( $content ) {
 		/**
 		 * Placeholder for all tags found.
@@ -30,13 +37,13 @@ abstract class Hashtag_Parser {
 		$content = wp_pre_kses_less_than( $content );
 		$content = wp_kses_normalize_entities( $content );
 
-		$dom = new DOMDocument;
+		$dom = new \DOMDocument;
 
 		libxml_use_internal_errors( true );
 		$dom->loadHTML( '<?xml encoding="UTF-8">' . $content );
 		libxml_use_internal_errors( false );
 
-		$xpath = new DOMXPath( $dom );
+		$xpath = new \DOMXPath( $dom );
 		$textNodes = $xpath->query( '//text()' );
 
 		foreach ( $textNodes as $textNode ) {
@@ -59,4 +66,122 @@ abstract class Hashtag_Parser {
 		return apply_filters( 'spaces_global_tags_found_tags', $tags, $content );
 
 	}
+
+	/**
+	 * Parses and links tags within a string.
+	 * Run on the_content and comment_text.
+	 *
+	 * @param string $content The content.
+	 * @param string $taxonomy Taxonomy name.
+	 *
+	 * @return string The linked content.
+	 */
+	static function tag_links( $content, $taxonomy ) {
+		if ( empty( $content ) ) {
+			return $content;
+		}
+
+		$tags = self::find_tags( $content );
+
+		$tags = array_unique( $tags );
+
+		usort( $tags, [ '\Spaces_Global_Tags\Hashtag_Parser', '_sortByLength' ] );
+
+		static $tag_links = [];
+
+		static $tag_info = [];
+
+		foreach ( $tags as $tag ) {
+			if ( isset( $tag_info[ $tag ] ) ) {
+				continue;
+			}
+			$info = get_multisite_term_by( 'slug', $tag, $taxonomy );
+			if ( ! $info ) {
+				$info = get_multisite_term_by( 'name', $tag, $taxonomy );
+			}
+			$tag_info[ $tag ] = $info;
+		}
+		$content = wp_pre_kses_less_than( $content );
+		$content = wp_kses_normalize_entities( $content );
+
+		$dom = new \DOMDocument;
+
+		libxml_use_internal_errors( true );
+		@$dom->loadHTML( '<?xml encoding="UTF-8">' . $content );
+		libxml_use_internal_errors( false );
+
+		$xpath = new \DOMXPath( $dom );
+
+		$textNodes = $xpath->query( '//text()' );
+
+		foreach( $textNodes as $textNode ) {
+			if ( ! $textNode->parentNode ) {
+				continue;
+			}
+			$parent = $textNode;
+			while( $parent ) {
+				if ( ! empty( $parent->tagName ) && in_array( strtolower( $parent->tagName ), array( 'pre', 'code', 'a', 'script', 'style', 'head' ) ) ) {
+					continue 2;
+				}
+				$parent = $parent->parentNode;
+			}
+			$text = $textNode->nodeValue;
+			$totalCount = 0;
+			foreach ( $tags as $tag ) {
+				if ( empty( $tag_info[ $tag ] ) ) {
+					continue;
+				}
+				if ( empty( $tag_links[ $tag ] ) ) {
+					$tag_url = get_multisite_term_link( $tag_info[ $tag ], $taxonomy );
+					$replacement = "<a href='" . esc_url( $tag_url ) . "' class='tag'><span class='tag-prefix'>#</span>" . htmlentities( $tag ) . "</a>";
+					$replacement = apply_filters( 'spaces_global_tags_tag_link', $replacement, $tag );
+					$tag_links[ $tag ] = $replacement;
+				} else {
+					$replacement = $tag_links[ $tag ];
+				}
+				$count = 0;
+				$text = preg_replace( "/(^|\s|>|\()#$tag(($|\b|\s|<|\)))/", '$1' . $replacement . '$2', $text, -1, $count );
+				$totalCount += $count;
+			}
+			if ( ! $totalCount ) {
+				continue;
+			}
+			$text = wp_pre_kses_less_than( $text );
+			$text = wp_kses_normalize_entities( $text );
+
+			$newNodes = new \DOMDocument;
+
+			libxml_use_internal_errors( true );
+			@$newNodes->loadHTML( '<?xml encoding="UTF-8"><div>' . $text . '</div>' );
+			libxml_use_internal_errors( false );
+
+			foreach( $newNodes->getElementsByTagName( 'body' )->item( 0 )->childNodes->item( 0 )->childNodes as $newNode ) {
+				$cloneNode = $dom->importNode( $newNode, true );
+				if ( ! $cloneNode ) {
+					continue 2;
+				}
+				$textNode->parentNode->insertBefore( $cloneNode, $textNode );
+			}
+			$textNode->parentNode->removeChild( $textNode );
+		}
+		$html = '';
+		// Sometime, DOMDocument will put things in the head instead of the body.
+		// We still need to keep them in our output.
+		$search_tags = array( 'head', 'body' );
+		foreach ( $search_tags as $tag ) {
+			$list = $dom->getElementsByTagName( $tag );
+			if ( 0 === $list->length ) {
+				continue;
+			}
+			foreach ( $list->item( 0 )->childNodes as $node ) {
+				$html .= $dom->saveHTML( $node );
+			}
+		}
+		return $html;
+	}
+
+	static function _sortByLength( $a, $b ) {
+		return strlen( $b ) - strlen( $a );
+	}
+
 }

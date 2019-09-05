@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.2.2
-Stable tag: 0.7.0
+Stable tag: 0.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ Clone it, love it, hate it.
 
 = Does this replace the default tags in a WordPress multisite =
 
-No.
+No. But it does disable them on posts.
 
 = Is there a global search available =
 
@@ -36,6 +36,12 @@ No.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.8.0 =
+Add composer.json support.
+Implement PSR4 autoloader for classes.
+Add method to filter displayed comment/content with links to the tag archive pages.
+Implement logic for parsing and settings terms for posts in comments.
 
 = 0.7.0 =
 Implement abstract class Hashtag_Parser.
