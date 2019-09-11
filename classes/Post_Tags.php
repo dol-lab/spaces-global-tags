@@ -37,7 +37,8 @@ class Post_Tags extends Hashtag_Parser {
 	 */
 	public function register() {
 
-		add_action( 'transition_post_status', [ $this, 'process_tags' ], 12, 3 );
+		//add_action( 'transition_post_status', [ $this, 'process_tags' ], 620, 3 );
+		add_action( 'wp_insert_post', [ $this, 'process_tags' ], 15, 3 );
 
 		/**
 		 * When displaying a tag, update the markup with a link to the tag.
@@ -56,6 +57,9 @@ class Post_Tags extends Hashtag_Parser {
 	 * @return string|void
 	 */
 	static function tag_post_links( $content ) {
+
+		if ( ! is_single() || ! in_the_loop() || ! is_main_query() ) return $content;
+
 		$taxonomy = self::$taxonomy;
 		return parent::tag_links( $content, $taxonomy );
 	}
@@ -64,22 +68,24 @@ class Post_Tags extends Hashtag_Parser {
 	 * Fires when the post is published or edited and
 	 * sets the tags accordingly.
 	 *
-	 * @param boolean $new Status being switched to
-	 * @param boolean $old Status being switched from
-	 * @param object $post The full Post object
-	 *
-	 * @since 0.8.0
+	 * @param int $post_id current post being edited.
+	 * @param object $post a WP Post object.
+	 * @param bool $updated Whether this is an existing post being updated or not.
 	 *
 	 * @return void
+	 * @since 0.8.0
+	 *
 	 */
-	public function process_tags( $new, $old, $post ) {
+	public function process_tags( $post_id, $post, $updated ) {
 
-		if ( 'publish' !== $new ) {
+		if ( wp_is_post_revision( $post_id ) ) {
 			return;
 		}
 		$tags = self::find_tags( $post->post_content );
+
 		// TODO: Needs fixing, creates the tags, but not yet adds them to the post.
-		set_post_multisite_terms( $post->ID, $tags, self::$taxonomy, get_current_blog_id(), true );
+
+		set_post_multisite_terms( $post_id, $tags, self::$taxonomy, get_current_blog_id(), true );
 	}
 
 }

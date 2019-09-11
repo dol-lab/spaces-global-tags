@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.2.2
-Stable tag: 0.8.0
+Stable tag: 0.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,12 @@ No.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.9.0 =
+Fixed a bug that prevented comment and post tags to be linked properly.
+Added implementation for global post tags to work in the same fashion as comment tags.
+Added README.md
+Added translation file.
 
 = 0.8.0 =
 Add composer.json support.

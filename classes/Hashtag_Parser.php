@@ -17,6 +17,33 @@ abstract class Hashtag_Parser {
 	const TAGS_REGEX = '/(?:^|\s|>|\()#(?!\d{1,2}(?:$|\s|<|\)|\p{P}{1}\s))([\p{L}\p{N}\_\-\.]*[\p{L}\p{N}]+)(?:$|\b|\s|<|\))/iu';
 
 	/**
+	 * Prepares the content to be parsed.
+	 *
+	 * @param string $content comment or post content.
+	 *
+	 * @return array $output with a xpath query and DOMDocument.
+	 */
+	static function setup_content( $content ) {
+		$content = wp_pre_kses_less_than( $content );
+		$content = wp_kses_normalize_entities( $content );
+
+		$dom = new \DOMDocument;
+
+		libxml_use_internal_errors( true );
+		@$dom->loadHTML( '<?xml encoding="UTF-8">' . $content );
+		libxml_use_internal_errors( false );
+
+		$xpath = new \DOMXPath( $dom );
+
+		$output = [
+			'xpath' => $xpath->query( '//text()' ),
+			'dom' => $dom,
+		];
+
+		return $output;
+	}
+
+	/**
 	 * Find tags in a string.
 	 *
 	 * @param $content
@@ -31,20 +58,9 @@ abstract class Hashtag_Parser {
 		 */
 		$tags = [];
 
-		/**
-		 * Run filters on the text string first.
-		 */
-		$content = wp_pre_kses_less_than( $content );
-		$content = wp_kses_normalize_entities( $content );
+		$document = self::setup_content( $content );
 
-		$dom = new \DOMDocument;
-
-		libxml_use_internal_errors( true );
-		$dom->loadHTML( '<?xml encoding="UTF-8">' . $content );
-		libxml_use_internal_errors( false );
-
-		$xpath = new \DOMXPath( $dom );
-		$textNodes = $xpath->query( '//text()' );
+		$textNodes = $document['xpath'];
 
 		foreach ( $textNodes as $textNode ) {
 			if ( ! $textNode->parentNode ) {
@@ -87,9 +103,13 @@ abstract class Hashtag_Parser {
 
 		usort( $tags, [ '\Spaces_Global_Tags\Hashtag_Parser', '_sortByLength' ] );
 
-		static $tag_links = [];
+		/**
+		 * TODO: Maybe make them static again, but then we would have to clear out
+		 * whenever taxonomy changes.
+		 */
+		$tag_links = [];
 
-		static $tag_info = [];
+		$tag_info = [];
 
 		foreach ( $tags as $tag ) {
 			if ( isset( $tag_info[ $tag ] ) ) {
@@ -101,18 +121,11 @@ abstract class Hashtag_Parser {
 			}
 			$tag_info[ $tag ] = $info;
 		}
-		$content = wp_pre_kses_less_than( $content );
-		$content = wp_kses_normalize_entities( $content );
 
-		$dom = new \DOMDocument;
+		$document = self::setup_content( $content );
 
-		libxml_use_internal_errors( true );
-		@$dom->loadHTML( '<?xml encoding="UTF-8">' . $content );
-		libxml_use_internal_errors( false );
-
-		$xpath = new \DOMXPath( $dom );
-
-		$textNodes = $xpath->query( '//text()' );
+		$textNodes = $document['xpath'];
+		$dom = $document['dom'];
 
 		foreach( $textNodes as $textNode ) {
 			if ( ! $textNode->parentNode ) {
@@ -177,6 +190,9 @@ abstract class Hashtag_Parser {
 				$html .= $dom->saveHTML( $node );
 			}
 		}
+		unset( $tag_links );
+		unset( $tag_info );
+
 		return $html;
 	}
 
