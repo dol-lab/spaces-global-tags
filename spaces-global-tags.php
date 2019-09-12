@@ -167,6 +167,9 @@ function register_global_post_tag_taxonomy() {
 	$args       = [
 		'labels'       => $labels,
 		'hierarchical' => false,
+		'rewrite'      => [
+			'slug' => 'post-tag'
+		]
 	];
 
 	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
@@ -209,8 +212,12 @@ function register_global_comment_tag_taxonomy() {
 	];
 
 	$args       = [
+		'public'       => true,
 		'labels'       => $labels,
 		'hierarchical' => false,
+		'rewrite'      => [
+			'slug' => 'comment-tag'
+		]
 	];
 
 	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
@@ -222,4 +229,24 @@ function register_global_comment_tag_taxonomy() {
 add_action( 'init', __NAMESPACE__ . '\register_global_comment_tag_taxonomy', 0 );
 
 
+/**
+ * @param \WP_Query $query
+ * TODO: Work in progress for custom archive queries, alternative might be https://github.com/HarvardChanSchool/multisite-taxonomies-frontend
+ */
+function archive_query( \WP_Query $query ) {
+	if ( ! is_admin() && $query->is_main_query() && array_key_exists( 'global_post_tag', $query->query_vars ) ) {
 
+		$multisite_tax_query_args = [
+			[
+				'multisite_taxonomy' => 'global_post_tag',
+				'multisite_terms' => $query->query_vars['global_post_tag'],
+				'field' => 'slug',
+			]
+		];
+
+		$multisite_tax_query = new \Multisite_Taxonomy_Query( $multisite_tax_query_args );
+		$multisite_tax_query->get_sql_for_clause(  );
+	}
+}
+
+//add_action( 'pre_get_posts', __NAMESPACE__ . '\archive_query' );

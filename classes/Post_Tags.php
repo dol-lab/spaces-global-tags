@@ -83,9 +83,7 @@ class Post_Tags extends Hashtag_Parser {
 		}
 		$tags = self::find_tags( $post->post_content );
 
-		// TODO: Needs fixing, creates the tags, but not yet adds them to the post.
-
-		set_post_multisite_terms( $post_id, $tags, self::$taxonomy, get_current_blog_id(), true );
+		set_post_multisite_terms( $post_id, $tags, self::$taxonomy, get_current_blog_id(), false );
 	}
 
 }
