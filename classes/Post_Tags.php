@@ -19,13 +19,11 @@ class Post_Tags extends Hashtag_Parser {
 	/**
 	 * Comment_Tags constructor.
 	 *
-	 * @param string $taxonomy the multisite taxonomy used.
-	 *
 	 * @since 0.8.0
 	 */
-	public function __construct( $taxonomy = 'global_post_tag' ) {
+	public function __construct() {
 
-		self::$taxonomy = $taxonomy;
+		self::$taxonomy = GLOBAL_POST_TAG_TAX;
 
 		self::register();
 	}
@@ -37,13 +35,12 @@ class Post_Tags extends Hashtag_Parser {
 	 */
 	public function register() {
 
-		//add_action( 'transition_post_status', [ $this, 'process_tags' ], 620, 3 );
 		add_action( 'wp_insert_post', [ $this, 'process_tags' ], 15, 3 );
 
 		/**
 		 * When displaying a tag, update the markup with a link to the tag.
 		 */
-		add_filter( 'the_content',         [ '\Spaces_Global_Tags\Post_Tags', 'tag_post_links'], 15 );
+		add_filter( 'the_content', [ '\Spaces_Global_Tags\Post_Tags', 'tag_post_links'], 15 );
 
 	}
 
@@ -58,9 +55,12 @@ class Post_Tags extends Hashtag_Parser {
 	 */
 	static function tag_post_links( $content ) {
 
-		if ( ! is_single() || ! in_the_loop() || ! is_main_query() ) return $content;
+		if ( ! is_main_query() || ! is_singular() ) {
+			return $content;
+		}
 
 		$taxonomy = self::$taxonomy;
+
 		return parent::tag_links( $content, $taxonomy );
 	}
 

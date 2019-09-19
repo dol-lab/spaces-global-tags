@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the Spaces Global Tags package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Spaces Global Tags 0.8.0\n"
+"Project-Id-Version: Spaces Global Tags 0.10.0\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/spaces-global-tags\n"
-"POT-Creation-Date: 2019-09-11 12:43:35+00:00\n"
+"POT-Creation-Date: 2019-09-19 14:13:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,143 +25,143 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: spaces-global-tags.php:146 spaces-global-tags.php:148
+#: spaces-global-tags.php:177 spaces-global-tags.php:179
 msgid "Post Tags"
 msgstr ""
 
-#: spaces-global-tags.php:147
+#: spaces-global-tags.php:178
 msgid "Post Tag"
 msgstr ""
 
-#: spaces-global-tags.php:149
+#: spaces-global-tags.php:180
 msgid "All Post Tags"
 msgstr ""
 
-#: spaces-global-tags.php:150
+#: spaces-global-tags.php:181
 msgid "New Post Tag Name"
 msgstr ""
 
-#: spaces-global-tags.php:151
+#: spaces-global-tags.php:182
 msgid "Add New Post Tag"
 msgstr ""
 
-#: spaces-global-tags.php:152
+#: spaces-global-tags.php:183
 msgid "Edit Post Tag"
 msgstr ""
 
-#: spaces-global-tags.php:153
+#: spaces-global-tags.php:184
 msgid "Update Post Tag"
 msgstr ""
 
-#: spaces-global-tags.php:154
+#: spaces-global-tags.php:185
 msgid "View Post Tag"
 msgstr ""
 
-#: spaces-global-tags.php:155
+#: spaces-global-tags.php:186
 msgid "Separate post tags with commas"
 msgstr ""
 
-#: spaces-global-tags.php:156
+#: spaces-global-tags.php:187
 msgid "Add or remove post tags"
 msgstr ""
 
-#: spaces-global-tags.php:157
+#: spaces-global-tags.php:188
 msgid "Choose from the most used post tags"
 msgstr ""
 
-#: spaces-global-tags.php:158
+#: spaces-global-tags.php:189
 msgid "Popular Post Tags"
 msgstr ""
 
-#: spaces-global-tags.php:159
+#: spaces-global-tags.php:190
 msgid "Search Post Tags"
 msgstr ""
 
-#: spaces-global-tags.php:160
+#: spaces-global-tags.php:191
 msgid "No Post Tags Found"
 msgstr ""
 
-#: spaces-global-tags.php:161
+#: spaces-global-tags.php:192
 msgid "No post tags for this category"
 msgstr ""
 
-#: spaces-global-tags.php:162 spaces-global-tags.php:206
+#: spaces-global-tags.php:193 spaces-global-tags.php:241
 msgid "Most Used"
 msgstr ""
 
-#: spaces-global-tags.php:163
+#: spaces-global-tags.php:194
 msgid "Post Tags list"
 msgstr ""
 
-#: spaces-global-tags.php:164
+#: spaces-global-tags.php:195
 msgid "Post Tags list navigation"
 msgstr ""
 
-#: spaces-global-tags.php:190 spaces-global-tags.php:192
+#: spaces-global-tags.php:225 spaces-global-tags.php:227
 msgid "Comment Tags"
 msgstr ""
 
-#: spaces-global-tags.php:191
+#: spaces-global-tags.php:226
 msgid "Comment Tag"
 msgstr ""
 
-#: spaces-global-tags.php:193
+#: spaces-global-tags.php:228
 msgid "All Comment Tags"
 msgstr ""
 
-#: spaces-global-tags.php:194
+#: spaces-global-tags.php:229
 msgid "New Comment Tag Name"
 msgstr ""
 
-#: spaces-global-tags.php:195
+#: spaces-global-tags.php:230
 msgid "Add New Comment Tag"
 msgstr ""
 
-#: spaces-global-tags.php:196
+#: spaces-global-tags.php:231
 msgid "Edit Comment Tag"
 msgstr ""
 
-#: spaces-global-tags.php:197
+#: spaces-global-tags.php:232
 msgid "Update Comment Tag"
 msgstr ""
 
-#: spaces-global-tags.php:198
+#: spaces-global-tags.php:233
 msgid "View Comment Tag"
 msgstr ""
 
-#: spaces-global-tags.php:199
+#: spaces-global-tags.php:234
 msgid "Separate comment tags with commas"
 msgstr ""
 
-#: spaces-global-tags.php:200
+#: spaces-global-tags.php:235
 msgid "Add or remove comment tags"
 msgstr ""
 
-#: spaces-global-tags.php:201
+#: spaces-global-tags.php:236
 msgid "Choose from the most used comment tags"
 msgstr ""
 
-#: spaces-global-tags.php:202
+#: spaces-global-tags.php:237
 msgid "Popular Comment Tags"
 msgstr ""
 
-#: spaces-global-tags.php:203
+#: spaces-global-tags.php:238
 msgid "Search Comment Tags"
 msgstr ""
 
-#: spaces-global-tags.php:204
+#: spaces-global-tags.php:239
 msgid "No Comment Tags Found"
 msgstr ""
 
-#: spaces-global-tags.php:205
+#: spaces-global-tags.php:240
 msgid "No comment tags for this category"
 msgstr ""
 
-#: spaces-global-tags.php:207
+#: spaces-global-tags.php:242
 msgid "Comment Tags list"
 msgstr ""
 
-#: spaces-global-tags.php:208
+#: spaces-global-tags.php:243
 msgid "Comment Tags list navigation"
 msgstr ""
 
@@ -187,12 +187,12 @@ msgstr ""
 msgid "https://silvanhagen.com"
 msgstr ""
 
-#: spaces-global-tags.php:92
+#: spaces-global-tags.php:121
 msgctxt "network admin notice on activation"
 msgid "This plugin needs to be run on a WordPress multisite installation."
 msgstr ""
 
-#: spaces-global-tags.php:101
+#: spaces-global-tags.php:130
 msgctxt "network admin notice on activation"
 msgid "This plugin needs the Multisite Taxonomies plugin to work properly."
 msgstr ""

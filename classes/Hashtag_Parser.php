@@ -24,6 +24,7 @@ abstract class Hashtag_Parser {
 	 * @return array $output with a xpath query and DOMDocument.
 	 */
 	static function setup_content( $content ) {
+
 		$content = wp_pre_kses_less_than( $content );
 		$content = wp_kses_normalize_entities( $content );
 
@@ -51,6 +52,7 @@ abstract class Hashtag_Parser {
 	 * @return mixed|void
 	 */
 	static function find_tags( $content ) {
+
 		/**
 		 * Placeholder for all tags found.
 		 *
@@ -93,6 +95,7 @@ abstract class Hashtag_Parser {
 	 * @return string The linked content.
 	 */
 	static function tag_links( $content, $taxonomy ) {
+
 		if ( empty( $content ) ) {
 			return $content;
 		}
@@ -104,8 +107,7 @@ abstract class Hashtag_Parser {
 		usort( $tags, [ '\Spaces_Global_Tags\Hashtag_Parser', '_sortByLength' ] );
 
 		/**
-		 * TODO: Maybe make them static again, but then we would have to clear out
-		 * whenever taxonomy changes.
+		 * TODO: Maybe make them static again, but then we would have to clear out whenever the taxonomy changes.
 		 */
 		$tag_links = [];
 
@@ -128,22 +130,30 @@ abstract class Hashtag_Parser {
 		$dom = $document['dom'];
 
 		foreach( $textNodes as $textNode ) {
+
 			if ( ! $textNode->parentNode ) {
 				continue;
 			}
+
 			$parent = $textNode;
+
 			while( $parent ) {
 				if ( ! empty( $parent->tagName ) && in_array( strtolower( $parent->tagName ), array( 'pre', 'code', 'a', 'script', 'style', 'head' ) ) ) {
 					continue 2;
 				}
 				$parent = $parent->parentNode;
 			}
+
 			$text = $textNode->nodeValue;
+
 			$totalCount = 0;
+
 			foreach ( $tags as $tag ) {
+
 				if ( empty( $tag_info[ $tag ] ) ) {
 					continue;
 				}
+
 				if ( empty( $tag_links[ $tag ] ) ) {
 					$tag_url = get_multisite_term_link( $tag_info[ $tag ], $taxonomy );
 					$replacement = "<a href='" . esc_url( $tag_url ) . "' class='tag'><span class='tag-prefix'>#</span>" . htmlentities( $tag ) . "</a>";
@@ -152,8 +162,11 @@ abstract class Hashtag_Parser {
 				} else {
 					$replacement = $tag_links[ $tag ];
 				}
+
 				$count = 0;
+
 				$text = preg_replace( "/(^|\s|>|\()#$tag(($|\b|\s|<|\)))/", '$1' . $replacement . '$2', $text, -1, $count );
+
 				$totalCount += $count;
 			}
 			if ( ! $totalCount ) {
@@ -169,27 +182,36 @@ abstract class Hashtag_Parser {
 			libxml_use_internal_errors( false );
 
 			foreach( $newNodes->getElementsByTagName( 'body' )->item( 0 )->childNodes->item( 0 )->childNodes as $newNode ) {
+
 				$cloneNode = $dom->importNode( $newNode, true );
+
 				if ( ! $cloneNode ) {
 					continue 2;
 				}
+
 				$textNode->parentNode->insertBefore( $cloneNode, $textNode );
 			}
+
 			$textNode->parentNode->removeChild( $textNode );
 		}
 		$html = '';
 		// Sometime, DOMDocument will put things in the head instead of the body.
 		// We still need to keep them in our output.
 		$search_tags = array( 'head', 'body' );
+
 		foreach ( $search_tags as $tag ) {
+
 			$list = $dom->getElementsByTagName( $tag );
+
 			if ( 0 === $list->length ) {
 				continue;
 			}
+
 			foreach ( $list->item( 0 )->childNodes as $node ) {
 				$html .= $dom->saveHTML( $node );
 			}
 		}
+
 		unset( $tag_links );
 		unset( $tag_info );
 

@@ -18,13 +18,11 @@ class Comment_Tags extends Hashtag_Parser {
 	/**
 	 * Comment_Tags constructor.
 	 *
-	 * @param string $taxonomy the multisite taxonomy used.
-	 *
 	 * @since 0.8.0
 	 */
-	public function __construct( $taxonomy = 'global_comment_tag' ) {
+	public function __construct() {
 
-		self::$taxonomy = $taxonomy;
+		self::$taxonomy = GLOBAL_COMMENT_TAG_TAX;
 
 		self::register();
 	}
@@ -43,7 +41,6 @@ class Comment_Tags extends Hashtag_Parser {
 		 * When displaying a tag, update the markup with a link to the tag.
 		 */
 		add_filter( 'comment_text',         [ '\Spaces_Global_Tags\Comment_Tags', 'tag_comment_links'], 15 );
-
 	}
 
 	/**
@@ -56,7 +53,9 @@ class Comment_Tags extends Hashtag_Parser {
 	 * @return string|void
 	 */
 	static function tag_comment_links( $content ) {
+
 		$taxonomy = self::$taxonomy;
+
 		return parent::tag_links( $content, $taxonomy );
 	}
 
@@ -68,6 +67,7 @@ class Comment_Tags extends Hashtag_Parser {
 	 * @since 0.8.0
 	 */
 	public function update_comment( $comment_id ) {
+
 		/**
 		 * Get the comment object.
 		 */
@@ -79,7 +79,6 @@ class Comment_Tags extends Hashtag_Parser {
 		$tags = self::find_tags( $comment->comment_content );
 
 		$this->update_post( $comment->comment_post_ID, $tags );
-
 	}
 
 	/**
@@ -94,7 +93,6 @@ class Comment_Tags extends Hashtag_Parser {
 		 * Append the comment tags on the associated post.
 		 */
 		set_post_multisite_terms( $post_id, $terms, self::$taxonomy, get_current_blog_id(), true );
-
 	}
 
 }
