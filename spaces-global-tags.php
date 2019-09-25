@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.10.0
+ * Version:         0.11.0
  * Network:         true
  *
  * @package         Spaces_Global_Tags
@@ -51,7 +51,7 @@ use WP_Post;
 /**
  * Constants to hold the taxonomy names.
  */
-const GLOBAL_POST_TAG_TAX = 'global_post_tag';
+const GLOBAL_POST_TAG_TAX    = 'global_post_tag';
 const GLOBAL_COMMENT_TAG_TAX = 'global_comment_tag';
 
 /**
@@ -170,10 +170,14 @@ add_action( 'init', __NAMESPACE__ . '\unregister_post_tag_taxonomy_for_post' );
  */
 function register_global_post_tag_taxonomy() {
 
+	if ( ! function_exists( 'register_multisite_taxonomy' ) ) {
+		return false;
+	}
+
 	/**
 	 * Load taxonomy for Tags
 	 */
-	$labels     = [
+	$labels = [
 		'name'                       => __( 'Post Tags', 'spaces-global-tags' ),
 		'singular_name'              => __( 'Post Tag', 'spaces-global-tags' ),
 		'menu_name'                  => __( 'Post Tags', 'spaces-global-tags' ),
@@ -195,12 +199,12 @@ function register_global_post_tag_taxonomy() {
 		'items_list_navigation'      => __( 'Post Tags list navigation', 'spaces-global-tags' ),
 	];
 
-	$args       = [
+	$args = [
 		'labels'       => $labels,
 		'hierarchical' => false,
 		'rewrite'      => [
-			'slug' => 'post-tag' // Nicer url part.
-		]
+			'slug' => 'post-tag', // Nicer url part.
+		],
 	];
 
 	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
@@ -218,10 +222,14 @@ add_action( 'init', __NAMESPACE__ . '\register_global_post_tag_taxonomy', 0 );
  */
 function register_global_comment_tag_taxonomy() {
 
+	if ( ! function_exists( 'register_multisite_taxonomy' ) ) {
+		return false;
+	}
+
 	/**
 	 * Load taxonomy for Tags
 	 */
-	$labels     = [
+	$labels = [
 		'name'                       => __( 'Comment Tags', 'spaces-global-tags' ),
 		'singular_name'              => __( 'Comment Tag', 'spaces-global-tags' ),
 		'menu_name'                  => __( 'Comment Tags', 'spaces-global-tags' ),
@@ -243,13 +251,13 @@ function register_global_comment_tag_taxonomy() {
 		'items_list_navigation'      => __( 'Comment Tags list navigation', 'spaces-global-tags' ),
 	];
 
-	$args       = [
+	$args = [
 		'public'       => true,
 		'labels'       => $labels,
 		'hierarchical' => false,
 		'rewrite'      => [
-			'slug' => 'comment-tag' // Nicer url part.
-		]
+			'slug' => 'comment-tag', // Nicer url part.
+		],
 	];
 
 	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
@@ -265,7 +273,7 @@ add_action( 'init', __NAMESPACE__ . '\register_global_comment_tag_taxonomy', 0 )
  * This avoids more queries being run.
  *
  * @param array|int $posts collection of Posts.
- * @param WP_Query $query the default WP_Query.
+ * @param WP_Query  $query the default WP_Query.
  *
  * @return array|int array of posts or 0 to run WP_Query.
  *
@@ -277,15 +285,15 @@ function posts_pre_query_filter( $posts, WP_Query $query ) {
 	 * Bail early if this isn't the main query or we are in admin context.
 	 */
 	if ( is_admin() || ! $query->is_main_query() ) {
-		return NULL;
+		return null;
 	}
 
 	/**
 	 * Check for our taxonomies to exists in the query vars.
 	 */
 	if ( false === array_key_exists( GLOBAL_POST_TAG_TAX, $query->query_vars )
-	     && false === array_key_exists( GLOBAL_COMMENT_TAG_TAX, $query->query_vars ) ) {
-		return NULL;
+		 && false === array_key_exists( GLOBAL_COMMENT_TAG_TAX, $query->query_vars ) ) {
+		return null;
 	}
 
 	/**
@@ -315,7 +323,12 @@ function posts_pre_query_filter( $posts, WP_Query $query ) {
 	/**
 	 * Run a multisite query to fetch posts using Multisite_WP_Query.
 	 */
-	$multisite_query = new Multisite_WP_Query( [ 'multisite_term_ids' => [ $multisite_term->multisite_term_id ], 'posts_per_page' => 10 ] );
+	$multisite_query = new Multisite_WP_Query(
+		[
+			'multisite_term_ids' => [ $multisite_term->multisite_term_id ],
+			'posts_per_page'     => 10,
+		]
+	);
 
 	/**
 	 * The famous have_posts() call.
@@ -323,7 +336,7 @@ function posts_pre_query_filter( $posts, WP_Query $query ) {
 	 * TODO: Maybe return a soft 404 or do something else.
 	 */
 	if ( 0 === count( $multisite_query->posts ) ) {
-		return NULL;
+		return null;
 	}
 
 	$posts = $multisite_query->posts;
@@ -337,7 +350,7 @@ function posts_pre_query_filter( $posts, WP_Query $query ) {
 	$query->set( 'max_num_pages', get_option( 'posts_per_page' ) % $multisite_term->count );
 
 	// TODO: this is not the correct soltuion to replace a template part.
-	//add_action( 'get_template_part', __NAMESPACE__ . '\replace_archive_content_template', 620, 3 );
+	// add_action( 'get_template_part', __NAMESPACE__ . '\replace_archive_content_template', 620, 3 );
 
 	return $posts;
 }
@@ -360,10 +373,10 @@ function transform_to_post_objects( $posts ) {
 		// Make sure we set the filter to 'raw'.
 		$post->filter = 'raw';
 
-		// Fix the post_name on the_post
+		// Fix the post_name on the_post.
 		$post->post_name = sanitize_title_with_dashes( $post->post_title );
 
-		// Set correct post type
+		// Set correct post type.
 		$post->post_type = 'post';
 
 		// Turn them into WP_Post objects even if it's sort of fake.
@@ -375,7 +388,7 @@ function transform_to_post_objects( $posts ) {
 /**
  * Function to transform the display of a given post in multisite.
  *
- * @param $post
+ * @param WP_Post $post current post object.
  *
  * @since 0.10.0
  */
@@ -400,8 +413,8 @@ add_action( 'the_post', __NAMESPACE__ . '\transform_the_post_maybe' );
  * Filter the post link to provide a proper permalink.
  *
  * @param null|string $permalink current permalink for the post.
- * @param WP_Post $post post object.
- * @param bool $leavename
+ * @param WP_Post     $post post object.
+ * @param bool        $leavename should the name stay or not.
  *
  * @return string updated permalink.
  *
@@ -412,44 +425,93 @@ function get_proper_permalink( $permalink, $post, $leavename ) {
 	if ( get_main_site_id() !== $post->blog_id ) {
 		$permalink = get_site_url( $post->blog_id, trailingslashit( $post->post_name ) );
 	}
-
 	return $permalink;
 }
 
 /**
  * Fix the multisite term archive link on subsites to point to the main site.
  *
- * @param string $multisite_termlink Link to the term archive page.
+ * @param string         $multisite_termlink Link to the term archive page.
  * @param Multisite_Term $multisite_term object containing the multisite term.
- * @param string $multisite_taxonomy multisite taxonomy name.
+ * @param string         $multisite_taxonomy multisite taxonomy name.
  *
  * @return string $multisite_termlink Link to the term archive page.
+ *
+ * TODO: Make this more robust for multi networks & subdomain installs.
  *
  * @since 0.10.0
  */
 function fix_multitaxo_term_link( $multisite_termlink, $multisite_term, $multisite_taxonomy ) {
 
-	/**
-	 * Works properly on the main site.
-	 */
-	if ( get_main_site_id() === get_current_blog_id() ) {
-		return $multisite_termlink;
+	if ( is_spaces_install() ) {
+		$old_path = get_site()->path;
+		$new_path = get_archive_path();
+
+		if ( '/' === $old_path ) {
+			$old_path = get_site()->domain . $old_path;
+			$new_path = get_site()->domain . $new_path;
+		}
+
+		$multisite_termlink = str_replace( $old_path, $new_path, $multisite_termlink );
+	} else {
+		/**
+		 * Works properly on the main site.
+		 */
+		if ( get_main_site_id() === get_current_blog_id() ) {
+			return $multisite_termlink;
+		}
+
+		/**
+		 * Get the path of the current site.
+		 */
+		$path               = get_site()->path;
+		$multisite_termlink = str_replace( $path, '/', $multisite_termlink );
 	}
-	/**
-	 * Get the path of the current site.
-	 *
-	 * TODO: Make this more robust for multi networks & subdomain installs.
-	 */
-	$path = get_site()->path;
-	$multisite_termlink = str_replace( $path, '/', $multisite_termlink );
 
 	return $multisite_termlink;
 }
 
 add_filter( 'multisite_term_link', __NAMESPACE__ . '\fix_multitaxo_term_link', 10, 3 );
 
+/**
+ * Helper to maybe replace the template.
+ *
+ * @param $slug
+ * @param $name
+ * @param $templates
+ */
 function replace_archive_content_template( $slug, $name, $templates ) {
 
+}
+
+/**
+ * Get the path for the multisite taxonomy archive pages.
+ *
+ * @return string $path path to the multisite taxonomy archive page.
+ */
+function get_archive_path() {
+
+	$path = get_site()->path;
+
+	if ( is_spaces_install() ) {
+		$spaces_options = get_site_option( 'spaces_options' );
+		if ( array_key_exists( 'shared_home_blog', $spaces_options ) && '' !== $spaces_options['shared_home_blog'] ) {
+			$path = trailingslashit( $spaces_options['shared_home_blog'] );
+			$path = '/' . ltrim( $path, '/\\' );
+		}
+	}
+
+	return apply_filters( 'spaces_global_tags_archive_path', $path );
+}
+
+/**
+ * Basic check for a spaces install.
+ *
+ * @return bool
+ */
+function is_spaces_install() {
+
+	return class_exists( '\Spaces_Setup' );
 }
 
 /*-------------------------------------------------  Tiny helpers ----------------------------------------------------*/
@@ -470,11 +532,11 @@ function debug_all_hooks( $tag ) {
 		return;
 	}
 
-	echo "<pre>" . $tag . "</pre>";
+	echo '<pre>' . $tag . '</pre>';
 
 	$debug_tags[] = $tag;
 }
 
-//add_action( 'all', __NAMESPACE__ . '\debug_all_hooks' );
+// add_action( 'all', __NAMESPACE__ . '\debug_all_hooks' );
 
-//add_filter( 'found_posts', function( $found_posts, $query ) { var_dump( $found_posts ); }, 10, 2 );
+// add_filter( 'found_posts', function( $found_posts, $query ) { var_dump( $found_posts ); }, 10, 2 );

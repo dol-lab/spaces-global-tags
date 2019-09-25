@@ -28,7 +28,7 @@ abstract class Hashtag_Parser {
 		$content = wp_pre_kses_less_than( $content );
 		$content = wp_kses_normalize_entities( $content );
 
-		$dom = new \DOMDocument;
+		$dom = new \DOMDocument();
 
 		libxml_use_internal_errors( true );
 		@$dom->loadHTML( '<?xml encoding="UTF-8">' . $content );
@@ -38,7 +38,7 @@ abstract class Hashtag_Parser {
 
 		$output = [
 			'xpath' => $xpath->query( '//text()' ),
-			'dom' => $dom,
+			'dom'   => $dom,
 		];
 
 		return $output;
@@ -76,7 +76,7 @@ abstract class Hashtag_Parser {
 				$parent = $parent->parentNode;
 			}
 			$matches = [];
-			if ( preg_match_all( Hashtag_Parser::TAGS_REGEX, $textNode->nodeValue, $matches ) ) {
+			if ( preg_match_all( self::TAGS_REGEX, $textNode->nodeValue, $matches ) ) {
 				$tags = array_merge( $tags, $matches[1] );
 			}
 		}
@@ -127,9 +127,9 @@ abstract class Hashtag_Parser {
 		$document = self::setup_content( $content );
 
 		$textNodes = $document['xpath'];
-		$dom = $document['dom'];
+		$dom       = $document['dom'];
 
-		foreach( $textNodes as $textNode ) {
+		foreach ( $textNodes as $textNode ) {
 
 			if ( ! $textNode->parentNode ) {
 				continue;
@@ -137,7 +137,7 @@ abstract class Hashtag_Parser {
 
 			$parent = $textNode;
 
-			while( $parent ) {
+			while ( $parent ) {
 				if ( ! empty( $parent->tagName ) && in_array( strtolower( $parent->tagName ), array( 'pre', 'code', 'a', 'script', 'style', 'head' ) ) ) {
 					continue 2;
 				}
@@ -155,9 +155,9 @@ abstract class Hashtag_Parser {
 				}
 
 				if ( empty( $tag_links[ $tag ] ) ) {
-					$tag_url = get_multisite_term_link( $tag_info[ $tag ], $taxonomy );
-					$replacement = "<a href='" . esc_url( $tag_url ) . "' class='tag'><span class='tag-prefix'>#</span>" . htmlentities( $tag ) . "</a>";
-					$replacement = apply_filters( 'spaces_global_tags_tag_link', $replacement, $tag );
+					$tag_url           = get_multisite_term_link( $tag_info[ $tag ], $taxonomy );
+					$replacement       = "<a href='" . esc_url( $tag_url ) . "' class='tag'><span class='tag-prefix'>#</span>" . htmlentities( $tag ) . '</a>';
+					$replacement       = apply_filters( 'spaces_global_tags_tag_link', $replacement, $tag );
 					$tag_links[ $tag ] = $replacement;
 				} else {
 					$replacement = $tag_links[ $tag ];
@@ -175,13 +175,13 @@ abstract class Hashtag_Parser {
 			$text = wp_pre_kses_less_than( $text );
 			$text = wp_kses_normalize_entities( $text );
 
-			$newNodes = new \DOMDocument;
+			$newNodes = new \DOMDocument();
 
 			libxml_use_internal_errors( true );
 			@$newNodes->loadHTML( '<?xml encoding="UTF-8"><div>' . $text . '</div>' );
 			libxml_use_internal_errors( false );
 
-			foreach( $newNodes->getElementsByTagName( 'body' )->item( 0 )->childNodes->item( 0 )->childNodes as $newNode ) {
+			foreach ( $newNodes->getElementsByTagName( 'body' )->item( 0 )->childNodes->item( 0 )->childNodes as $newNode ) {
 
 				$cloneNode = $dom->importNode( $newNode, true );
 

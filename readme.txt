@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.2.2
-Stable tag: 0.10.0
+Stable tag: 0.11.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,9 @@ No.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.11.0 =
+Added first spaces specific fixes for urls using spaces_options.
 
 = 0.10.0 =
 Fixed a bug to link to the proper multisite term archive page.

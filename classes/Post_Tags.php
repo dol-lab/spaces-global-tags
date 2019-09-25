@@ -4,17 +4,20 @@ namespace Spaces_Global_Tags;
 
 /**
  * Class Post_Tags
+ *
  * @package Spaces_Global_Tags
  * @since 0.7.0
  */
 class Post_Tags extends Hashtag_Parser {
 
 	/**
+	 * The Post_Tags taxonomy string.
+	 *
 	 * @var string $taxonomy the multisite taxonomy used.
 	 *
 	 * @since 0.8.0
 	 */
-	static $taxonomy;
+	public static $taxonomy;
 
 	/**
 	 * Comment_Tags constructor.
@@ -40,7 +43,7 @@ class Post_Tags extends Hashtag_Parser {
 		/**
 		 * When displaying a tag, update the markup with a link to the tag.
 		 */
-		add_filter( 'the_content', [ '\Spaces_Global_Tags\Post_Tags', 'tag_post_links'], 15 );
+		add_filter( 'the_content', [ '\Spaces_Global_Tags\Post_Tags', 'tag_post_links' ], 15 );
 
 	}
 
@@ -53,9 +56,9 @@ class Post_Tags extends Hashtag_Parser {
 	 *
 	 * @return string|void
 	 */
-	static function tag_post_links( $content ) {
+	public static function tag_post_links( $content ) {
 
-		if ( ! is_main_query() || ! is_singular() ) {
+		if ( ! is_main_query() || is_admin() ) {
 			return $content;
 		}
 
@@ -68,13 +71,12 @@ class Post_Tags extends Hashtag_Parser {
 	 * Fires when the post is published or edited and
 	 * sets the tags accordingly.
 	 *
-	 * @param int $post_id current post being edited.
+	 * @param int    $post_id current post being edited.
 	 * @param object $post a WP Post object.
-	 * @param bool $updated Whether this is an existing post being updated or not.
+	 * @param bool   $updated Whether this is an existing post being updated or not.
 	 *
 	 * @return void
 	 * @since 0.8.0
-	 *
 	 */
 	public function process_tags( $post_id, $post, $updated ) {
 
