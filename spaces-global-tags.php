@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.11.0
+ * Version:         0.12.0
  * Network:         true
  *
  * @package         Spaces_Global_Tags
@@ -53,6 +53,15 @@ use WP_Post;
  */
 const GLOBAL_POST_TAG_TAX    = 'global_post_tag';
 const GLOBAL_COMMENT_TAG_TAX = 'global_comment_tag';
+/**
+ * Constants for the version and assets dir.
+ */
+define( 'SPACES_GLOBAL_TAGS_ASSETS_URL', plugin_dir_url( __FILE__ ) . 'assets' );
+
+/**
+ * Initialize the global archive pages.
+ */
+new Global_Tags_Archive();
 
 /**
  * Register our custom activation hook.
@@ -202,9 +211,6 @@ function register_global_post_tag_taxonomy() {
 	$args = [
 		'labels'       => $labels,
 		'hierarchical' => false,
-		'rewrite'      => [
-			'slug' => 'post-tag', // Nicer url part.
-		],
 	];
 
 	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
@@ -255,9 +261,6 @@ function register_global_comment_tag_taxonomy() {
 		'public'       => true,
 		'labels'       => $labels,
 		'hierarchical' => false,
-		'rewrite'      => [
-			'slug' => 'comment-tag', // Nicer url part.
-		],
 	];
 
 	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
@@ -355,7 +358,7 @@ function posts_pre_query_filter( $posts, WP_Query $query ) {
 	return $posts;
 }
 
-add_filter( 'posts_pre_query', __NAMESPACE__ . '\posts_pre_query_filter', PHP_INT_MAX, 2 );
+// add_filter( 'posts_pre_query', __NAMESPACE__ . '\posts_pre_query_filter', PHP_INT_MAX, 2 );
 
 /**
  * Transforms stdClass objects from multisite-taxonomies query to WP_Post objects.
@@ -474,17 +477,6 @@ function fix_multitaxo_term_link( $multisite_termlink, $multisite_term, $multisi
 add_filter( 'multisite_term_link', __NAMESPACE__ . '\fix_multitaxo_term_link', 10, 3 );
 
 /**
- * Helper to maybe replace the template.
- *
- * @param $slug
- * @param $name
- * @param $templates
- */
-function replace_archive_content_template( $slug, $name, $templates ) {
-
-}
-
-/**
  * Get the path for the multisite taxonomy archive pages.
  *
  * @return string $path path to the multisite taxonomy archive page.
@@ -512,6 +504,76 @@ function get_archive_path() {
 function is_spaces_install() {
 
 	return class_exists( '\Spaces_Setup' );
+}
+
+/**
+ * Check if this page could be multitaxo.
+ *
+ * @return bool
+ */
+function is_multitaxo() {
+	global $wp;
+
+	if ( false !== strpos(
+		$wp->request,
+		apply_filters( 'multisite_taxonomy_base_url_slug', 'multitaxo' ) )
+	) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Check if the multisite term exists.
+ *
+ * @return bool
+ */
+function is_multisite_term() {
+	if ( multisite_term_exists(
+		sanitize_key( get_query_var( 'multisite_term' ) ),
+		sanitize_key( get_query_var( 'multisite_taxonomy' ) )
+	) ) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Check if the multisite taxonomy exists.
+ *
+ * @return bool
+ */
+function is_multisite_taxonomy() {
+	if ( multisite_taxonomy_exists(
+		sanitize_key( get_query_var( 'multisite_taxonomy' ) )
+	) ) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Check if we are just browsing multitaxo and not a term or taxonomy.
+ *
+ * @return bool
+ */
+function is_multisite_taxonomies() {
+	if ( is_multitaxo() && ! is_multisite_term() && ! is_multisite_taxonomy() ) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function get_plugin_version() {
+	$version = 0;
+	if ( function_exists( 'get_plugin_data' ) ) {
+		$version = get_plugin_data( __FILE__, false, false )->Version;
+	}
+	return $version;
 }
 
 /*-------------------------------------------------  Tiny helpers ----------------------------------------------------*/
