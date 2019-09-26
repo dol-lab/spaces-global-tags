@@ -14,6 +14,15 @@
 	margin-left: 0;
 }
 
+.alphabetical_index ul {
+	list-style: none;
+}
+.alphabetical_index li {
+	float: left;
+	display: inline-block;
+	padding: 10px;
+}
+
 .topic-list li {
     float: left;
     display: inline-block;

@@ -271,165 +271,6 @@ function register_global_comment_tag_taxonomy() {
 
 add_action( 'init', __NAMESPACE__ . '\register_global_comment_tag_taxonomy', 0 );
 
-/**
- * Pre-populates the posts in WP_Query with Multisite_WP_Query if we are in the right context.
- * This avoids more queries being run.
- *
- * @param array|int $posts collection of Posts.
- * @param WP_Query  $query the default WP_Query.
- *
- * @return array|int array of posts or 0 to run WP_Query.
- *
- * @since 0.10.0
- */
-function posts_pre_query_filter( $posts, WP_Query $query ) {
-
-	/**
-	 * Bail early if this isn't the main query or we are in admin context.
-	 */
-	if ( is_admin() || ! $query->is_main_query() ) {
-		return null;
-	}
-
-	/**
-	 * Check for our taxonomies to exists in the query vars.
-	 */
-	if ( false === array_key_exists( GLOBAL_POST_TAG_TAX, $query->query_vars )
-		 && false === array_key_exists( GLOBAL_COMMENT_TAG_TAX, $query->query_vars ) ) {
-		return null;
-	}
-
-	/**
-	 * Prevent duplicate queries.
-	 */
-	remove_filter(
-		'posts_pre_query',
-		__NAMESPACE__ . '\posts_pre_query_filter',
-		PHP_INT_MAX
-	);
-
-	/**
-	 * Set the taxonomy we are looking for. If we made it this far,
-	 * we are sure to be on either one of these.
-	 */
-	if ( array_key_exists( GLOBAL_POST_TAG_TAX, $query->query_vars ) ) {
-		$multisite_taxonomy = GLOBAL_POST_TAG_TAX;
-	} else {
-		$multisite_taxonomy = GLOBAL_COMMENT_TAG_TAX;
-	}
-
-	/**
-	 * Multisite term object.
-	 */
-	$multisite_term = get_multisite_term_by( 'slug', get_query_var( $multisite_taxonomy ), $multisite_taxonomy );
-
-	/**
-	 * Run a multisite query to fetch posts using Multisite_WP_Query.
-	 */
-	$multisite_query = new Multisite_WP_Query(
-		[
-			'multisite_term_ids' => [ $multisite_term->multisite_term_id ],
-			'posts_per_page'     => 10,
-		]
-	);
-
-	/**
-	 * The famous have_posts() call.
-	 *
-	 * TODO: Maybe return a soft 404 or do something else.
-	 */
-	if ( 0 === count( $multisite_query->posts ) ) {
-		return null;
-	}
-
-	$posts = $multisite_query->posts;
-
-	$posts = transform_to_post_objects( $posts );
-
-	// Set found_posts to allow pagination to work.
-	$query->set( 'found_posts', $multisite_term->count );
-
-	// Set max_num_pages to allow pagination to work.
-	$query->set( 'max_num_pages', get_option( 'posts_per_page' ) % $multisite_term->count );
-
-	// TODO: this is not the correct soltuion to replace a template part.
-	// add_action( 'get_template_part', __NAMESPACE__ . '\replace_archive_content_template', 620, 3 );
-
-	return $posts;
-}
-
-// add_filter( 'posts_pre_query', __NAMESPACE__ . '\posts_pre_query_filter', PHP_INT_MAX, 2 );
-
-/**
- * Transforms stdClass objects from multisite-taxonomies query to WP_Post objects.
- *
- * @param array $posts of stdClass fake post objects.
- *
- * @return array $posts of WP_Post objects.
- *
- * @since 0.10.0
- */
-function transform_to_post_objects( $posts ) {
-
-	$output = [];
-	foreach ( $posts as $post ) {
-		// Make sure we set the filter to 'raw'.
-		$post->filter = 'raw';
-
-		// Fix the post_name on the_post.
-		$post->post_name = sanitize_title_with_dashes( $post->post_title );
-
-		// Set correct post type.
-		$post->post_type = 'post';
-
-		// Turn them into WP_Post objects even if it's sort of fake.
-		$output[] = new WP_Post( $post );
-	}
-	return $output;
-}
-
-/**
- * Function to transform the display of a given post in multisite.
- *
- * @param WP_Post $post current post object.
- *
- * @since 0.10.0
- */
-function transform_the_post_maybe( $post ) {
-
-	/**
-	 * Check if our fake property exists, if not, bail!
-	 */
-	if ( ! isset( $post->blog_id ) ) {
-		return;
-	}
-
-	/**
-	 * Filter the post link to provide a proper permalink.
-	 */
-	add_filter( 'post_link', __NAMESPACE__ . '\get_proper_permalink', 620, 3 );
-}
-
-add_action( 'the_post', __NAMESPACE__ . '\transform_the_post_maybe' );
-
-/**
- * Filter the post link to provide a proper permalink.
- *
- * @param null|string $permalink current permalink for the post.
- * @param WP_Post     $post post object.
- * @param bool        $leavename should the name stay or not.
- *
- * @return string updated permalink.
- *
- * @since 0.10.0
- */
-function get_proper_permalink( $permalink, $post, $leavename ) {
-
-	if ( get_main_site_id() !== $post->blog_id ) {
-		$permalink = get_site_url( $post->blog_id, trailingslashit( $post->post_name ) );
-	}
-	return $permalink;
-}
 
 /**
  * Fix the multisite term archive link on subsites to point to the main site.
@@ -516,7 +357,8 @@ function is_multitaxo() {
 
 	if ( false !== strpos(
 		$wp->request,
-		apply_filters( 'multisite_taxonomy_base_url_slug', 'multitaxo' ) )
+		apply_filters( 'multisite_taxonomy_base_url_slug', 'multitaxo' )
+	)
 	) {
 		return true;
 	} else {
@@ -571,7 +413,8 @@ function is_multisite_taxonomies() {
 function get_plugin_version() {
 	$version = 0;
 	if ( function_exists( 'get_plugin_data' ) ) {
-		$version = get_plugin_data( __FILE__, false, false )->Version;
+		$plugin_data = get_plugin_data( __FILE__, false, false );
+		$version     = $plugin_data['Version'];
 	}
 	return $version;
 }

@@ -7,28 +7,29 @@ use Multisite_WP_Query;
 
 /**
  * Class Global_Tags_Archive
+ *
  * @package Spaces_Global_Tags
  * @since 0.12.0
  */
 class Global_Tags_Archive {
 
-    /**
+	/**
 	 * Global_Tags_Archive constructor.
 	 *
 	 * @since 0.12.0
 	 */
 	public function __construct() {
-
 		self::register();
 	}
 
 	/**
-	 * init function.
+	 * Register function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function register() {
+
 		// Add archive pages related query vars.
 		add_filter( 'query_vars', [ $this, 'archive_pages_query_vars' ] );
 
@@ -166,7 +167,7 @@ class Global_Tags_Archive {
 	public function archive_pages_template_include( $template ) {
 
 		if ( is_multitaxo() ) {
-			return locate_template( array( 'page.php' ) );
+			$template = apply_filters( 'spages_global_tags_archive_template_path', plugin_dir_path( __DIR__ ) . 'templates/template.php' );
 		}
 
 		return $template;
@@ -183,17 +184,7 @@ class Global_Tags_Archive {
 		global $wp_query;
 
 		if ( is_multitaxo() && in_the_loop() ) {
-			if ( is_multisite_taxonomy() ) {
-				// TODO: move $multisite_taxonomy as class property.
-				$multisite_taxonomy = get_multisite_taxonomy( sanitize_key( get_query_var( 'multisite_taxonomy' ) ) );
-				if ( is_a( $multisite_taxonomy, 'Multisite_Taxonomy' ) ) {
-					// translators: The multisite taxonomy name on a multisite taxonomy archive page.
-					return wp_sprintf( __( 'All %s: ', 'spaces-global-tags' ), $multisite_taxonomy->labels->name );
-				} else {
-					// TODO: move check to constructor and return proper 404.
-					return __( 'Invalid Multisite Taxonomy', 'spaces-global-tags' );
-				}
-			} elseif ( is_multisite_term() ) {
+			if ( is_multisite_term() ) {
 				// TODO: move $multisite_taxonomy as class property.
 				$multisite_term = get_multisite_term_by( 'slug', sanitize_key( get_query_var( 'multisite_term' ) ), sanitize_key( get_query_var( 'multisite_taxonomy' ) ), OBJECT );
 				if ( is_a( $multisite_term, 'Multisite_Term' ) ) {
@@ -205,6 +196,16 @@ class Global_Tags_Archive {
 				}
 				// TODO: move check to constructor and return proper 404.
 				return __( 'Multisite term achive page', 'spaces-global-tags' );
+			} elseif ( is_multisite_taxonomy() ) {
+				// TODO: move $multisite_taxonomy as class property.
+				$multisite_taxonomy = get_multisite_taxonomy( sanitize_key( get_query_var( 'multisite_taxonomy' ) ) );
+				if ( is_a( $multisite_taxonomy, 'Multisite_Taxonomy' ) ) {
+					// translators: The multisite taxonomy name on a multisite taxonomy archive page.
+					return wp_sprintf( __( 'All %s: ', 'spaces-global-tags' ), $multisite_taxonomy->labels->name );
+				} else {
+					// TODO: move check to constructor and return proper 404.
+					return __( 'Invalid Multisite Taxonomy', 'spaces-global-tags' );
+				}
 			} else {
 				return __( 'All Multisite Taxonomies:', 'spaces-global-tags' );
 			}
@@ -254,8 +255,8 @@ class Global_Tags_Archive {
 			// We start buffering the page content.
 			ob_start();
 			?>
-
-		<div class="alphabetical_index">
+			<div class="card">
+			<div class="alphabetical_index">
 			<ul>
 				<?php // We create an anchor navigation index. ?>
 				<?php
@@ -288,6 +289,7 @@ class Global_Tags_Archive {
 				</div>
 			<?php endforeach; ?>
 		</div>
+			</div>
 
 			<?php
 		else :
@@ -318,7 +320,7 @@ class Global_Tags_Archive {
 			$hierarchical = ( true === $tax->hierarchical ) ? 'hierarchical' : 'flat';
 
 			?>
-			<div>
+			<div class="card">
 				<h2><a href="<?php echo esc_attr( $tax->name ); ?>"><?php echo esc_html( $tax->labels->name ); ?></a></h2>
 			</div>
 			<?php
@@ -429,6 +431,7 @@ class Global_Tags_Archive {
 				$target_attr = '_blank';
 			}
 			?>
+			<div class="card">
 			<div class="topic-block">
 				<h2 class="topic-letter"><?php esc_html_e( 'Related Topics', 'spaces-global-tags' ); ?></h2>
 				<ul class="topic-list">
@@ -440,6 +443,7 @@ class Global_Tags_Archive {
 						</li>
 					<?php endforeach; ?>
 				</ul>
+			</div>
 			</div>
 			<?php
 		endif;
@@ -468,6 +472,7 @@ class Global_Tags_Archive {
 					$pinned_class = 'pinned-story';
 				}
 				?>
+					<div class="card">
 					<article id="post-<?php multitaxo_the_id( $post->ID ); ?>" aria-label="<?php esc_attr_e( 'Excerpt of the article:', 'spaces-global-tags' ); ?> <?php echo esc_attr( multitaxo_get_the_title( $post->post_title ) ); ?>"  class="post-<?php multitaxo_the_id( $post->ID ); ?> post multisite-term <?php echo esc_attr( $pinned_class ); ?>">
 						<header class="entry-header">
 							<?php
@@ -491,6 +496,7 @@ class Global_Tags_Archive {
 							<?php multitaxo_the_excerpt( $post ); ?>
 						</div><!-- .entry-summary -->
 					</article>
+					</div>
 				<?php
 			endforeach; // Post loop.
 			// Get our generated page content.
@@ -527,12 +533,14 @@ class Global_Tags_Archive {
 		// add the pagination to the page.
 		ob_start();
 		?>
+		<div class="card">
 		<nav id="term-<?php echo absint( $multisite_term->multisite_term_id ); ?>" class="navigation pagination" role="navigation">
 			<h3 class="assistive-text screen-reader-text"><?php esc_html_e( 'Post navigation', 'spaces-global-tags' ); ?></h3>
 			<div class="nav-links">
 				<?php echo paginate_links( $pagination_args ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</div>
 		</nav>
+		</div>
 		<?php
 		// Get our generated page content.
 		$page_content = ob_get_clean();
