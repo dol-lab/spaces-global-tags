@@ -29,11 +29,19 @@
 
 .alphabetical_index ul {
 	list-style: none;
+	margin-left: 0;
 }
 .alphabetical_index li {
 	float: left;
 	display: inline-block;
-	padding: 10px;
+	padding: 11px;
+	font-size: 1.125rem;
+}
+.alphabetical_index li:first-child {
+	padding-left: 0;
+}
+.alphabetical_index li a {
+	color: #ed624b;
 }
 
 .topic-list li {
@@ -118,7 +126,7 @@
 	padding-left: 0;
 }
 
-.card.header {
+.card.header, .alphabetical_index, .topic-container {
 	padding: 0.5rem 0.75rem;
 }
 
@@ -127,7 +135,7 @@
 	font-weight: normal;
 }
 
-.card.header h2 {
+.card.header h2, h2.topic-letter {
 	font-size: 1.1rem;
 	font-weight: normal;
 }
