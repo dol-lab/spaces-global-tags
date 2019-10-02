@@ -520,8 +520,8 @@ class Global_Tags_Archive {
 			'end_size'  => 3,
 			'mid_size'  => 2,
 			'prev_next' => true,
-			'prev_text' => __( '&laquo; Previous', 'spaces-global-tags' ),
-			'next_text' => __( 'Next &raquo;', 'spaces-global-tags' ),
+			'prev_text' => __( '<i class="fa fa-angle-left" aria-hidden="true"></i><span class="sr-only">« prev</span></a>', 'spaces-global-tags' ),
+			'next_text' => __( '<i class="fa fa-angle-right" aria-hidden="true"></i><span class="sr-only">next »</span>', 'spaces-global-tags' ),
 			'type'      => 'plain',
 		);
 
