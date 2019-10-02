@@ -27,7 +27,7 @@ get_header();
 							the_post();
 							?>
 							<div class="cell">
-								<div class="card static">
+								<div class="card static header">
 									<h1><?php the_title(); ?></h1>
 									<?php do_action( 'spaces_global_tags_below_archive_title' ); ?>
 								</div>

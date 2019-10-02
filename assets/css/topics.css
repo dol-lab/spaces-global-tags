@@ -13,14 +13,14 @@
 
 .multisite-taxonomy-archive.blog .format-status .entry-title,
 .multisite-all-tax-archive.blog .format-status .entry-title {
-    display: block;
+	display: block;
 }
 
 .topic-block {
-    display: block;
-    clear: both;
-    overflow: hidden;
-    margin-bottom: 14px;
+	display: block;
+	clear: both;
+	overflow: hidden;
+	margin-bottom: 14px;
 }
 
 .topic-block ul {
@@ -37,23 +37,23 @@
 }
 
 .topic-list li {
-    float: left;
-    display: inline-block;
-    margin: 0;
-    list-style-type: none;
+	float: left;
+	display: inline-block;
+	margin: 0;
+	list-style-type: none;
 }
 
 .topic-list li a {
-    font-size: 16px;
-    font-size: 1rem;
-    color: #008cc0;
-    background-color: #ecede5;
-    margin-right: 7px;
-    margin-bottom: 10px;
-    padding: 4px;
-    padding-left: 11px;
-    padding-right: 11px;
-    display: block;
+	font-size: .875rem;
+	color: #ed624b;
+	padding: 4px;
+	display: block;
+}
+.topic-list li:first-child a {
+	padding-left: 0;
+}
+.topic-list li.current a {
+	font-weight: bold;
 }
 
 .multisite-term-archive .entry-content .entry-header {
@@ -89,11 +89,11 @@
 }
 
 .multisite-term-archive .entry-header .entry-title {
-    display: block !important;
+	display: block !important;
 }
 
 .multisite-term-archive .entry-content .entry-header .entry-title a {
-    color: #008CC0;
+	color: #008CC0;
 	font-size: 16px;
 	font-size: 1rem;
 	font-weight: 600;
@@ -118,34 +118,16 @@
 	padding-left: 0;
 }
 
-.multisite-term-archive ul.paging {
-    display: block;
+.card.header {
+	padding: 0.5rem 0.75rem;
 }
 
-.multisite-term-archive ul.paging li {
-    display: inline-block;
-    margin: 0;
-    list-style-type: none;
+.card.header h1 {
+	font-size: 1.5rem;
+	font-weight: normal;
 }
 
-.multisite-term-archive ul.paging li .current {
-    color: #000;
-    padding: 7px 11px 7px 11px;
-    margin-left: 1px;
-    background-color: #C1C3B1;
-    font-size: 14px;
-    font-size: 0.875rem;
-    line-height: 1.71428571;
-    display: inline-block;
-}
-
-.multisite-term-archive ul.paging li a {
-    margin: 0px 0px 2px 0px;
-    color: #008CC0;
-    padding: 7px 11px 7px 11px;
-    margin-left: 1px;
-    font-size: 14px;
-    font-size: 0.875rem;
-    line-height: 1.71428571;
-    text-decoration: none;
+.card.header h2 {
+	font-size: 1.1rem;
+	font-weight: normal;
 }
