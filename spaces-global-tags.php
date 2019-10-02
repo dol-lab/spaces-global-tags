@@ -419,6 +419,16 @@ function get_plugin_version() {
 	return $version;
 }
 
+/**
+ * Custom excerpt length on the archive pages.
+ */
+add_filter(
+	'multitaxo_excerpt_length',
+	function() {
+		return 55;
+	}
+);
+
 /*-------------------------------------------------  Tiny helpers ----------------------------------------------------*/
 
 // Array for all the hooks.
