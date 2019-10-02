@@ -188,8 +188,19 @@ class Global_Tags_Archive {
 				// TODO: move $multisite_taxonomy as class property.
 				$multisite_term = get_multisite_term_by( 'slug', sanitize_key( get_query_var( 'multisite_term' ) ), sanitize_key( get_query_var( 'multisite_taxonomy' ) ), OBJECT );
 				if ( is_a( $multisite_term, 'Multisite_Term' ) ) {
+					/**
+					 * Display related terms after archive title.
+					 *
+					 * @since 0.13.0
+					 */
+					add_action(
+						'spaces_global_tags_below_archive_title',
+						function() use ( $multisite_term ) {
+							echo self::do_multisite_term_related_terms_list( $multisite_term ); // phpcs:ignore WordPress.Security.EscapeOutput
+						}
+					);
 					// translators: The multisite term name on a multisite term archive page.
-					return wp_sprintf( __( 'All articles related to "%s": ', 'spaces-global-tags' ), $multisite_term->name );
+					return wp_sprintf( __( 'All articles related to #%s: ', 'spaces-global-tags' ), $multisite_term->name );
 				} else {
 					// TODO: move check to constructor and return proper 404.
 					return __( 'Invalid Multisite Term', 'spaces-global-tags' );
@@ -255,7 +266,8 @@ class Global_Tags_Archive {
 			// We start buffering the page content.
 			ob_start();
 			?>
-			<div class="card">
+			<div class="cell">
+			<div class="card static">
 			<div class="alphabetical_index">
 			<ul>
 				<?php // We create an anchor navigation index. ?>
@@ -282,13 +294,14 @@ class Global_Tags_Archive {
 					<ul class="topic-list">
 						<?php if ( is_array( $topics ) && ! empty( $topics ) ) : ?>
 							<?php foreach ( $topics as $topic ) : ?>
-								<li><a href="<?php echo esc_url( get_multisite_term_link( $topic->multisite_term_id, $topic->multisite_taxonomy ) ); ?>"><?php echo esc_attr( $topic->name ); ?></a></li>
+								<li><a href="<?php echo esc_url( get_multisite_term_link( $topic->multisite_term_id, $topic->multisite_taxonomy ) ); ?>"><?php echo esc_attr( '#' . $topic->name ); ?></a></li>
 							<?php endforeach; ?>
 						<?php endif; ?>
 					</ul>
 				</div>
 			<?php endforeach; ?>
 		</div>
+			</div>
 			</div>
 
 			<?php
@@ -341,7 +354,7 @@ class Global_Tags_Archive {
 		$page_content   = '';
 		$multisite_term = get_multisite_term_by( 'slug', sanitize_key( get_query_var( 'multisite_term' ) ), sanitize_key( get_query_var( 'multisite_taxonomy' ) ), OBJECT );
 		if ( is_a( $multisite_term, 'Multisite_Term' ) ) {
-			$page_content .= self::do_multisite_term_related_terms_list( $multisite_term );
+			// $page_content .= self::do_multisite_term_related_terms_list( $multisite_term );
 			// TODO: Move this to the class constructor.
 			// Get the posts for our multisite term using Multisite_WP_Query.
 			$query = new Multisite_WP_Query(
@@ -426,24 +439,18 @@ class Global_Tags_Archive {
 		// We start buffering the page content.
 		ob_start();
 		if ( is_array( $related_terms ) && ! empty( $related_terms ) ) :
-			$target_attr = '_self';
-			if ( true === $new_window ) {
-				$target_attr = '_blank';
-			}
 			?>
-			<div class="card">
 			<div class="topic-block">
-				<h2 class="topic-letter"><?php esc_html_e( 'Related Topics', 'spaces-global-tags' ); ?></h2>
+				<h2 class="topic-letter"><?php esc_html_e( 'More Tags', 'spaces-global-tags' ); ?></h2>
 				<ul class="topic-list">
 					<?php foreach ( $related_terms as $related_multisite_term ) : ?>
-						<li>
-							<a target="<?php echo esc_attr( $target_attr ); ?>" href="<?php echo esc_url( get_multisite_term_link( $related_multisite_term ) ); ?>">
-							<?php echo esc_html( $related_multisite_term->name ); ?>
+						<li class="<?php echo $multisite_term->name === $related_multisite_term->name ? 'current' : ''; ?>">
+							<a href="<?php echo esc_url( get_multisite_term_link( $related_multisite_term ) ); ?>">
+							<?php echo esc_html( '#' . $related_multisite_term->name ); ?>
 							</a>
 						</li>
 					<?php endforeach; ?>
 				</ul>
-			</div>
 			</div>
 			<?php
 		endif;
@@ -465,34 +472,24 @@ class Global_Tags_Archive {
 			ob_start();
 			// We display the posts of the current page.
 			foreach ( $posts as $post ) :
-				// handle pinning.
-				$pinned_class = '';
-
-				if ( isset( $post->pinned_story ) && true === $post->pinned_story ) {
-					$pinned_class = 'pinned-story';
-				}
 				?>
-					<div class="card">
-					<article id="post-<?php multitaxo_the_id( $post->ID ); ?>" aria-label="<?php esc_attr_e( 'Excerpt of the article:', 'spaces-global-tags' ); ?> <?php echo esc_attr( multitaxo_get_the_title( $post->post_title ) ); ?>"  class="post-<?php multitaxo_the_id( $post->ID ); ?> post multisite-term <?php echo esc_attr( $pinned_class ); ?>">
-						<header class="entry-header">
-							<?php
-							$display_thumbnails = apply_filters( 'hsph_plugin_tagging_display_thumbnails_posts_lists', true );
-							if ( is_array( $post->post_thumbnail ) && ! empty( $post->post_thumbnail['url'] ) && $display_thumbnails ) {
-								multitaxo_the_post_thumbnail( $post );
-							}
-							// Filter allowing overide of the target on links. Defaults to same window (_self).
-							$link_target = apply_filters( 'hsph_plugin_tagging_link_target_posts_lists', '_self' );
-
-							// Pinned story.
-							if ( isset( $post->pinned_story ) && true === $post->pinned_story ) {
-								?>
-									<div class="pinned-title"><span class="dashicons dashicons-admin-post"></span> <?php esc_html_e( 'Pinned', 'spaces-global-tags' ); ?></div>
-								<?php
-							}
-							?>
-							<h2 class="entry-title"><a target="<?php echo esc_attr( $link_target ); ?>" href="<?php multitaxo_the_permalink( $post->post_permalink ); ?>" rel="bookmark" title="<?php echo esc_attr( __( 'Permalink to ', 'spaces-global-tags' ) . multitaxo_get_the_title( $post->post_title ) ); ?>"><?php multitaxo_the_title( $post->post_title ); ?></a></h2>
+					<div class="cell">
+					<article id="post-<?php multitaxo_the_id( $post->ID ); ?>" aria-label="<?php esc_attr_e( 'Excerpt of the article:', 'spaces-global-tags' ); ?> <?php echo esc_attr( multitaxo_get_the_title( $post->post_title ) ); ?>"  class="post-<?php multitaxo_the_id( $post->ID ); ?> post card multisite-term">
+						<header class="card-header entry-header">
+							<small class="flex flex-dir-row align-middle">
+								<span class="dot-after">
+									<?php
+									// translators: see context, poste in space.
+									printf( _x( 'In %s', 'Posted in space', 'spaces-global-tags' ), get_site( $post->blog_id )->blogname ); // phpcs:ignore WordPress.Security.EscapeOutput
+									?>
+								</span>
+								<span>
+									<?php echo esc_html( mysql2date( get_option( 'date_format' ), $post->post_date, false ) ); ?>
+								</span>
+							</small>
+							<h4 class="card-title entry-title"><a href="<?php multitaxo_the_permalink( $post->post_permalink ); ?>" rel="bookmark" title="<?php echo esc_attr( __( 'Permalink to ', 'spaces-global-tags' ) . multitaxo_get_the_title( $post->post_title ) ); ?>"><?php multitaxo_the_title( $post->post_title ); ?></a></h4>
 						</header><!-- .entry-header -->
-						<div class="entry-summary">
+						<div class="entry-summary post-content card-section s-fg-a-c1-parent post-excerpt">
 							<?php multitaxo_the_excerpt( $post ); ?>
 						</div><!-- .entry-summary -->
 					</article>
@@ -533,13 +530,9 @@ class Global_Tags_Archive {
 		// add the pagination to the page.
 		ob_start();
 		?>
-		<div class="card">
-		<nav id="term-<?php echo absint( $multisite_term->multisite_term_id ); ?>" class="navigation pagination" role="navigation">
+		<div class="pagination cell">
 			<h3 class="assistive-text screen-reader-text"><?php esc_html_e( 'Post navigation', 'spaces-global-tags' ); ?></h3>
-			<div class="nav-links">
-				<?php echo paginate_links( $pagination_args ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-			</div>
-		</nav>
+			<?php echo paginate_links( $pagination_args ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		</div>
 		<?php
 		// Get our generated page content.

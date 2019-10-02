@@ -27,13 +27,12 @@ get_header();
 							the_post();
 							?>
 							<div class="cell">
-								<div class="card">
+								<div class="card static">
 									<h1><?php the_title(); ?></h1>
+									<?php do_action( 'spaces_global_tags_below_archive_title' ); ?>
 								</div>
 							</div>
-							<div class="cell">
-								<?php the_content(); ?>
-							</div>
+							<?php the_content(); ?>
 							<?php
 
 							// If comments are open or we have at least one comment, load up the comment template.
