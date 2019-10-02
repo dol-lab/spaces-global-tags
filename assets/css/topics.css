@@ -1,3 +1,16 @@
+/**
+	Little helpers
+	TODO: Maybe migrate to the main theme
+ */
+.screen-reader-text, .screen-reader-text span, .screen-reader-shortcut {
+	position: absolute!important;
+	clip: rect(0,0,0,0);
+	height: 1px;
+	width: 1px;
+	border: 0;
+	overflow: hidden;
+}
+
 .multisite-taxonomy-archive.blog .format-status .entry-title,
 .multisite-all-tax-archive.blog .format-status .entry-title {
     display: block;
