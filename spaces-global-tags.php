@@ -44,9 +44,8 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 }
 
 use Multisite_Term;
-use Multisite_WP_Query;
-use WP_Query;
-use WP_Post;
+use WP_Error;
+use WP_REST_Response;
 
 /**
  * Constants to hold the taxonomy names.
