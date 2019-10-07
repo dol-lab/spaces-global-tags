@@ -428,6 +428,67 @@ add_filter(
 	}
 );
 
+/**
+ * Add rest endpoints for multisite taxonomies.
+ */
+add_action(
+	'rest_api_init',
+	function() {
+		$multisite_taxonomies = get_multisite_taxonomies( [], 'objects' );
+
+		foreach ( $multisite_taxonomies as $multisite_taxonomy ) {
+			register_rest_route(
+				'multitaxo/v1',
+				$multisite_taxonomy->name,
+				[
+					'methods'  => 'GET',
+					'callback' => __NAMESPACE__ . "\\get_{$multisite_taxonomy->name}_items",
+				]
+			);
+		}
+
+	}
+);
+
+/**
+ * Get all terms in a certain taxonomy.
+ *
+ * TODO: Add caching layer
+ *
+ * @param string $taxonomy name of the taxonomy.
+ * @return array|int|WP_Error
+ */
+function get_global_tag_items( $taxonomy ) {
+	$terms = get_multisite_terms(
+		[
+			'taxonomy'   => $taxonomy,
+			'fields'     => 'id=>name',
+			'hide_empty' => false,
+		]
+	);
+
+	return $terms;
+}
+
+/**
+ * Get all the post tags.
+ *
+ * @return WP_REST_Response
+ */
+function get_global_post_tag_items() {
+
+	return new WP_REST_Response( get_global_tag_items( 'global_post_tag' ) );
+}
+
+/**
+ * Get all the comment tags.
+ *
+ * @return WP_REST_Response
+ */
+function get_global_comment_tag_items() {
+	return new WP_REST_Response( get_global_tag_items( 'global_comment_tag' ) );
+}
+
 /*-------------------------------------------------  Tiny helpers ----------------------------------------------------*/
 
 // Array for all the hooks.
