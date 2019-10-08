@@ -83,6 +83,14 @@ class Post_Tags extends Hashtag_Parser {
 		if ( wp_is_post_revision( $post_id ) ) {
 			return;
 		}
+
+		/**
+		 * Only ever create tags when we are publishing.
+		 */
+		if ( 'publish' !== get_post_status( $post_id ) ) {
+			return;
+		}
+
 		$tags = self::find_tags( $post->post_content );
 
 		set_post_multisite_terms( $post_id, $tags, self::$taxonomy, get_current_blog_id(), false );

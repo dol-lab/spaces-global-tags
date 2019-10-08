@@ -467,7 +467,16 @@ function get_global_tag_items( $taxonomy ) {
 		]
 	);
 
-	return $terms;
+	$terms_array = [];
+
+	foreach ( $terms as $key => $value ) {
+		$terms_array[] = [
+			'id'   => $key,
+			'name' => $value,
+		];
+	}
+
+	return $terms_array;
 }
 
 /**
@@ -488,6 +497,29 @@ function get_global_post_tag_items() {
 function get_global_comment_tag_items() {
 	return new WP_REST_Response( get_global_tag_items( 'global_comment_tag' ) );
 }
+
+/**
+ * Scripts and CSS for tags auto completion.
+ *
+ * @since 0.13.0
+ */
+function autocomplete_scripts() {
+	wp_enqueue_style( 'tribute', SPACES_GLOBAL_TAGS_ASSETS_URL . '/css/tribute.css', null, get_plugin_version() );
+	wp_enqueue_script( 'tribute', SPACES_GLOBAL_TAGS_ASSETS_URL . '/js/tribute.min.js', null, get_plugin_version(), true );
+	wp_enqueue_script( 'spaces-global-tags', SPACES_GLOBAL_TAGS_ASSETS_URL . '/js/functions.js', null, get_plugin_version(), true );
+	wp_localize_script(
+		'spaces-global-tags',
+		'SpacesGlobalTags',
+		[
+			'routes' => [
+				'commentTags' => get_rest_url( null, 'multitaxo/v1/global_comment_tag' ),
+				'postTags'    => get_rest_url( null, 'multitaxo/v1/global_post_tag' ),
+			],
+		]
+	);
+}
+
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\autocomplete_scripts' );
 
 /*-------------------------------------------------  Tiny helpers ----------------------------------------------------*/
 
