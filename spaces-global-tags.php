@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.12.0
+ * Version:         0.13.0
  * Network:         true
  *
  * @package         Spaces_Global_Tags
@@ -44,9 +44,8 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 }
 
 use Multisite_Term;
-use Multisite_WP_Query;
-use WP_Query;
-use WP_Post;
+use WP_Error;
+use WP_REST_Response;
 
 /**
  * Constants to hold the taxonomy names.
@@ -428,6 +427,99 @@ add_filter(
 		return 55;
 	}
 );
+
+/**
+ * Add rest endpoints for multisite taxonomies.
+ */
+add_action(
+	'rest_api_init',
+	function() {
+		$multisite_taxonomies = get_multisite_taxonomies( [], 'objects' );
+
+		foreach ( $multisite_taxonomies as $multisite_taxonomy ) {
+			register_rest_route(
+				'multitaxo/v1',
+				$multisite_taxonomy->name,
+				[
+					'methods'  => 'GET',
+					'callback' => __NAMESPACE__ . "\\get_{$multisite_taxonomy->name}_items",
+				]
+			);
+		}
+
+	}
+);
+
+/**
+ * Get all terms in a certain taxonomy.
+ *
+ * TODO: Add caching layer
+ *
+ * @param string $taxonomy name of the taxonomy.
+ * @return array|int|WP_Error
+ */
+function get_global_tag_items( $taxonomy ) {
+	$terms = get_multisite_terms(
+		[
+			'taxonomy'   => $taxonomy,
+			'fields'     => 'id=>name',
+			'hide_empty' => false,
+		]
+	);
+
+	$terms_array = [];
+
+	foreach ( $terms as $key => $value ) {
+		$terms_array[] = [
+			'id'   => $key,
+			'name' => $value,
+		];
+	}
+
+	return $terms_array;
+}
+
+/**
+ * Get all the post tags.
+ *
+ * @return WP_REST_Response
+ */
+function get_global_post_tag_items() {
+
+	return new WP_REST_Response( get_global_tag_items( 'global_post_tag' ) );
+}
+
+/**
+ * Get all the comment tags.
+ *
+ * @return WP_REST_Response
+ */
+function get_global_comment_tag_items() {
+	return new WP_REST_Response( get_global_tag_items( 'global_comment_tag' ) );
+}
+
+/**
+ * Scripts and CSS for tags auto completion.
+ *
+ * @since 0.13.0
+ */
+function autocomplete_scripts() {
+	wp_enqueue_style( 'tribute', SPACES_GLOBAL_TAGS_ASSETS_URL . '/css/tribute.css', null, get_plugin_version() );
+	wp_enqueue_script( 'tribute', SPACES_GLOBAL_TAGS_ASSETS_URL . '/js/tribute.min.js', null, get_plugin_version(), true );
+	wp_enqueue_script( 'spaces-global-tags', SPACES_GLOBAL_TAGS_ASSETS_URL . '/js/functions.js', null, get_plugin_version(), true );
+	wp_localize_script(
+		'spaces-global-tags',
+		'SpacesGlobalTags',
+		[
+			'routes' => [
+				'commentTags' => get_rest_url( null, 'multitaxo/v1/global_comment_tag' ),
+				'postTags'    => get_rest_url( null, 'multitaxo/v1/global_post_tag' ),
+			],
+		]
+	);
+}
+
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\autocomplete_scripts' );
 
 /*-------------------------------------------------  Tiny helpers ----------------------------------------------------*/
 
