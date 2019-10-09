@@ -33,8 +33,9 @@ let tributeComments = new Tribute(
 			return '#' + item.original.name;
 		},
 		menuItemTemplate: function(item) {
-			return item.original.name;
-		}
+			return '#' + item.original.name;
+		},
+		spaceSelectsMatch: true
 	}
 );
 
@@ -54,8 +55,9 @@ let tributePosts = new Tribute(
 			return '#' + item.original.name;
 		},
 		menuItemTemplate: function(item) {
-			return item.original.name;
-		}
+			return '#' + item.original.name;
+		},
+		spaceSelectsMatch: true
 	}
 );
 
