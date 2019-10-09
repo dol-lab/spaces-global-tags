@@ -17,7 +17,7 @@ get_header();
 			echo get_spaces_blog_header( 'large static current' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 
-			<div class="spaces-content cell large-12 swap-container-parent">
+			<div class="spaces-content cell large-12">
 				<div class="spaces-stream first-swap-container">
 					<div class='grid-x grid-margin-x grid-margin-y'>
 						<?php
