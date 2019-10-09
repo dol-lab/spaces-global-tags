@@ -18,7 +18,7 @@ get_header();
 			?>
 
 			<div class="spaces-content cell large-12">
-				<div class="spaces-stream first-swap-container">
+				<div class="spaces-stream">
 					<div class='grid-x grid-margin-x grid-margin-y'>
 						<?php
 
