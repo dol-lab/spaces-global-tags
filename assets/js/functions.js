@@ -58,7 +58,7 @@ let tributeComments = new Tribute(
 /**
  * Attach Tribute for comments to the comment field in WordPress.
  */
-if (  document.body.contains( document.getElementById( "comment" ) ) ) {
+if ( document.body.contains( document.getElementById( "comment" ) ) ) {
 	tributeComments.attach( document.getElementById( "comment" ) );
 }
 
