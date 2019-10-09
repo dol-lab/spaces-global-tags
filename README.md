@@ -3,7 +3,7 @@
 **Tags:** multisite, wpmu, taxonomies  
 **Requires at least:** 4.5  
 **Tested up to:** 5.2.2  
-**Stable tag:** 0.13.0  
+**Stable tag:** 0.14.0  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -36,6 +36,9 @@ No.
 ## Screenshots ##
 
 ## Changelog ##
+
+### 0.14.0 ###
+Removed a CSS class on the global tag archive template for production.
 
 ### 0.13.0 ###
 Added REST API endpoints for global comment and post tags.
