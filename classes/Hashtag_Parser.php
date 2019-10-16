@@ -36,12 +36,10 @@ abstract class Hashtag_Parser {
 
 		$xpath = new \DOMXPath( $dom );
 
-		$output = [
+		return [
 			'xpath' => $xpath->query( '//text()' ),
 			'dom'   => $dom,
 		];
-
-		return $output;
 	}
 
 	/**

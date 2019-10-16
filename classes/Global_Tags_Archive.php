@@ -304,7 +304,7 @@ class Global_Tags_Archive {
 			</div>
 			</div>
 
-			<?php
+<?php
 		else :
 			?>
 			<p class="exploreWidget"><?php esc_html_e( 'No topics to display.', 'spaces-global-tags' ); ?></a></p>
@@ -432,7 +432,7 @@ class Global_Tags_Archive {
 	 * @param boolean        $new_window Should the links open in a new window (true/false - default to false).
 	 * @return string The archive page content.
 	 */
-	public static function do_multisite_term_related_terms_list( $multisite_term, $new_window = false ) {
+	public static function do_multisite_term_related_terms_list( $multisite_term ) {
 		// get the related topics.
 		$related_terms = get_multisite_terms( [ 'taxonomy' => $multisite_term->multisite_taxonomy ] );
 
@@ -494,7 +494,7 @@ class Global_Tags_Archive {
 						</div><!-- .entry-summary -->
 					</article>
 					</div>
-				<?php
+<?php
 			endforeach; // Post loop.
 			// Get our generated page content.
 			$page_content = ob_get_clean();

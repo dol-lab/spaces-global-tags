@@ -78,7 +78,7 @@ class Post_Tags extends Hashtag_Parser {
 	 * @return void
 	 * @since 0.8.0
 	 */
-	public function process_tags( $post_id, $post, $updated ) {
+	public function process_tags( $post_id, $post ) {
 
 		if ( wp_is_post_revision( $post_id ) ) {
 			return;
