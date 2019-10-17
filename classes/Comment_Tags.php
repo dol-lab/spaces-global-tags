@@ -4,6 +4,7 @@ namespace Spaces_Global_Tags;
 
 /**
  * Class Comment_Tags
+ *
  * @package Spaces_Global_Tags
  * @since 0.7.0
  */
@@ -13,7 +14,7 @@ class Comment_Tags extends Hashtag_Parser {
 	 *
 	 * @since 0.8.0
 	 */
-	static $taxonomy;
+	public static $taxonomy;
 
 	/**
 	 * Comment_Tags constructor.
@@ -34,13 +35,13 @@ class Comment_Tags extends Hashtag_Parser {
 	 */
 	public function register() {
 
-		add_action( 'wp_insert_comment',    [ $this, 'update_comment' ] );
-		add_action( 'edit_comment',         [ $this, 'update_comment' ] );
+		add_action( 'wp_insert_comment', [ $this, 'update_comment' ] );
+		add_action( 'edit_comment', [ $this, 'update_comment' ] );
 
 		/**
 		 * When displaying a tag, update the markup with a link to the tag.
 		 */
-		add_filter( 'comment_text',         [ '\Spaces_Global_Tags\Comment_Tags', 'tag_comment_links'], 15 );
+		add_filter( 'comment_text', [ '\Spaces_Global_Tags\Comment_Tags', 'tag_comment_links' ], 15 );
 	}
 
 	/**
@@ -52,7 +53,7 @@ class Comment_Tags extends Hashtag_Parser {
 	 *
 	 * @return string|void
 	 */
-	static function tag_comment_links( $content ) {
+	public static function tag_comment_links( $content ) {
 
 		$taxonomy = self::$taxonomy;
 
@@ -84,7 +85,7 @@ class Comment_Tags extends Hashtag_Parser {
 	/**
 	 * Update post with tags from comment.
 	 *
-	 * @param int $post_id ID of a post.
+	 * @param int   $post_id ID of a post.
 	 * @param array $terms Array of terms for $this->taxonomy.
 	 */
 	public function update_post( $post_id, $terms ) {

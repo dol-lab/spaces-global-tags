@@ -2,6 +2,9 @@
 
 namespace Spaces_Global_Tags;
 
+use DOMDocument;
+use DOMXPath;
+
 /**
  * Abstract Class Hashtag_Parser.
  *
@@ -28,13 +31,13 @@ abstract class Hashtag_Parser {
 		$content = wp_pre_kses_less_than( $content );
 		$content = wp_kses_normalize_entities( $content );
 
-		$dom = new \DOMDocument();
+		$dom = new DOMDocument();
 
 		libxml_use_internal_errors( true );
 		@$dom->loadHTML( '<?xml encoding="UTF-8">' . $content );
 		libxml_use_internal_errors( false );
 
-		$xpath = new \DOMXPath( $dom );
+		$xpath = new DOMXPath( $dom );
 
 		return [
 			'xpath' => $xpath->query( '//text()' ),
@@ -45,16 +48,16 @@ abstract class Hashtag_Parser {
 	/**
 	 * Find tags in a string.
 	 *
-	 * @param $content
+	 * @param string $content html content.
 	 *
 	 * @return mixed|void
 	 */
-	static function find_tags( $content ) {
+	public static function find_tags( $content ) {
 
 		/**
 		 * Placeholder for all tags found.
 		 *
-		 * var array $tags
+		 * @var array $tags
 		 */
 		$tags = [];
 
@@ -92,7 +95,7 @@ abstract class Hashtag_Parser {
 	 *
 	 * @return string The linked content.
 	 */
-	static function tag_links( $content, $taxonomy ) {
+	public static function tag_links( $content, $taxonomy ) {
 
 		if ( empty( $content ) ) {
 			return $content;
@@ -102,7 +105,7 @@ abstract class Hashtag_Parser {
 
 		$tags = array_unique( $tags );
 
-		usort( $tags, [ '\Spaces_Global_Tags\Hashtag_Parser', '_sortByLength' ] );
+		usort( $tags, [ '\Spaces_Global_Tags\Hashtag_Parser', 'sortByLength' ] );
 
 		/**
 		 * TODO: Maybe make them static again, but then we would have to clear out whenever the taxonomy changes.
@@ -173,7 +176,7 @@ abstract class Hashtag_Parser {
 			$text = wp_pre_kses_less_than( $text );
 			$text = wp_kses_normalize_entities( $text );
 
-			$newNodes = new \DOMDocument();
+			$newNodes = new DOMDocument();
 
 			libxml_use_internal_errors( true );
 			@$newNodes->loadHTML( '<?xml encoding="UTF-8"><div>' . $text . '</div>' );
@@ -216,7 +219,12 @@ abstract class Hashtag_Parser {
 		return $html;
 	}
 
-	static function _sortByLength( $a, $b ) {
+	/**
+	 * @param $a
+	 * @param $b
+	 * @return int
+	 */
+	protected static function sortByLength( $a, $b ) {
 		return strlen( $b ) - strlen( $a );
 	}
 

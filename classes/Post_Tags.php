@@ -73,8 +73,6 @@ class Post_Tags extends Hashtag_Parser {
 	 *
 	 * @param int    $post_id current post being edited.
 	 * @param object $post a WP Post object.
-	 * @param bool   $updated Whether this is an existing post being updated or not.
-	 *
 	 * @return void
 	 * @since 0.8.0
 	 */
