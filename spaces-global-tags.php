@@ -7,14 +7,14 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.15.0
+ * Version:         0.16.0
  * Network:         true
  *
  * @package         Spaces_Global_Tags
  */
 
 /**
- * Copyright (c) 2019 Silvan Hagen - Consulting (email : silvan@silvanhagen.com)
+ * Copyright (c) 2019 Silvan Hagen - Consulting (email: silvan@silvanhagen.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2 or, at
@@ -208,6 +208,7 @@ function register_global_post_tag_taxonomy() {
 	];
 
 	$args = [
+		'public'       => true,
 		'labels'       => $labels,
 		'hierarchical' => false,
 	];
@@ -223,7 +224,7 @@ add_action( 'init', __NAMESPACE__ . '\register_global_post_tag_taxonomy', 0 );
 /**
  * Registers `global_comment_tag` taxonomy.
  *
- * @sicne 0.6.0
+ * @since 0.6.0
  */
 function register_global_comment_tag_taxonomy() {
 
