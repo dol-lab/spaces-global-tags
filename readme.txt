@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.2.2
-Stable tag: 0.15.0
+Stable tag: 0.16.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,10 @@ No.
 == Screenshots ==
 
 == Changelog ==
+
+= 0.16.0 =
+Added a filter for roles to be allowed managing global tags.
+Check and add capabilities to user roles so they can add and create global tags, fixes https://github.com/dol-lab/spaces-global-tags/issues/20
 
 = 0.15.0 =
 Added a filter for post types with multisite taxonomies.
