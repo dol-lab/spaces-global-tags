@@ -114,6 +114,55 @@ function plugin_deactivate() {
 }
 
 /**
+ * Add capabilities per role.
+ *
+ * @since 0.16.0
+ *
+ * Todo: Needs to run on plugin activation only
+ * Todo: Needs deactivation routine
+ * Todo: Needs option to check for existing caps.
+ */
+function maybe_add_caps() {
+	/**
+	 * Check for existing option in the current site.
+	 */
+	if ( ! get_option( 'spaces_global_tags_caps_added' ) ) {
+		/**
+		 * Filterable roles to grant capabilities for using global tags.
+		 */
+		$roles = apply_filters( 'spaces_global_tags_user_roles', [ 'administrator', 'editor', 'author' ] );
+
+		/**
+		 * Filterable capabilities to be granted. See multisite_taxomomies/inc/class-multisite-taxonomy.php
+		 * for current capabilities.
+		 *
+		 * Current caps:
+		 *      manage_multisite_terms
+		 *      edit_multisite_terms
+		 *      assign_multisite_terms
+		 *      delete_multisite_terms (we don't grant this capability to users, only super admins)
+		 */
+		$caps = apply_filters( 'spaces_global_tags_user_capabilities', [ 'manage_multisite_terms', 'edit_multisite_terms', 'assign_multisite_terms' ] );
+
+		/**
+		 * Assign capabilities to each role.
+		 */
+		foreach ( $roles as $role_name ) {
+			$role = get_role( $role_name );
+			foreach ( $caps as $cap ) {
+				$role->add_cap( $cap );
+			}
+		}
+		/**
+		 * Add option to skip writing new caps for the current site.
+		 */
+		add_option( 'spaces_global_tags_caps_added', true );
+	}
+
+}
+add_action( 'init', __NAMESPACE__ . '\maybe_add_caps', 0 );
+
+/**
  * Checks if during activation any transients were set.
  *
  * Adds dismissable error notices, in case it's not a
