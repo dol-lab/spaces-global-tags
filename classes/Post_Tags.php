@@ -89,6 +89,15 @@ class Post_Tags extends Hashtag_Parser {
 			return;
 		}
 
+		/**
+		 * Check that we are working on an allowed post type.
+		 *
+		 * @since 0.15.0
+		 */
+		if ( ! in_array( get_post_type( $post_id ), apply_filters( 'spaces_global_tags_post_types', [ 'post' ] ) ) ) {
+			return;
+		}
+
 		$tags = self::find_tags( $post->post_content );
 
 		set_post_multisite_terms( $post_id, $tags, self::$taxonomy, get_current_blog_id(), false );
