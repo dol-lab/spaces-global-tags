@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.14.0
+ * Version:         0.15.0
  * Network:         true
  *
  * @package         Spaces_Global_Tags
@@ -212,7 +212,7 @@ function register_global_post_tag_taxonomy() {
 		'hierarchical' => false,
 	];
 
-	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
+	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', apply_filters( 'spaces_global_tags_post_types', [ 'post' ] ) );
 	register_multisite_taxonomy( GLOBAL_POST_TAG_TAX, $post_types, $args );
 
 	new Post_Tags();
