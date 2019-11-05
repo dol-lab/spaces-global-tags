@@ -490,7 +490,7 @@ class Global_Tags_Archive {
 							<h4 class="card-title entry-title"><a href="<?php multitaxo_the_permalink( $post->post_permalink ); ?>" rel="bookmark" title="<?php echo esc_attr( __( 'Permalink to ', 'spaces-global-tags' ) . multitaxo_get_the_title( $post->post_title ) ); ?>"><?php multitaxo_the_title( $post->post_title ); ?></a></h4>
 						</header><!-- .entry-header -->
 						<div class="entry-summary post-content card-section s-fg-a-c1-parent post-excerpt">
-							<?php multitaxo_the_excerpt( $post ); ?>
+							<?php echo strip_shortcodes( multitaxo_get_the_excerpt( $post ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						</div><!-- .entry-summary -->
 					</article>
 					</div>
