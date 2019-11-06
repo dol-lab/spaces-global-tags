@@ -26,7 +26,7 @@ abstract class Hashtag_Parser {
 	 *
 	 * @return array $output with a xpath query and DOMDocument.
 	 */
-	static function setup_content( $content ) {
+	public static function setup_content( $content ) {
 
 		$content = wp_pre_kses_less_than( $content );
 		$content = wp_kses_normalize_entities( $content );
