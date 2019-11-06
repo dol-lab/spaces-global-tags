@@ -2,40 +2,77 @@
 **Contributors:** neverything  
 **Tags:** multisite, wpmu, taxonomies  
 **Requires at least:** 4.5  
-**Tested up to:** 5.2.2  
-**Stable tag:** 0.16.0  
+**Tested up to:** 5.3  
+**Stable tag:** 0.17.0  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
-**WIP:** Do not use in production. This plugin explores the possibilities of global tags in a multisite install.  
+Adds global tags for posts and comments in a multisite installation. Uses the [Multisite Taxonomies](https://github.com/dol-lab/multisite-taxonomies) plugin
+to create taxonomies.
 
 ## Description ##
 
-This plugin relies on the True Multisite Indexer to perform network wide queries.
+This plugin relies on the [Multisite Taxonomies](https://github.com/dol-lab/multisite-taxonomies) plugin to perform network wide queries. Adding and managing taxonomies in the network admin.
 
-It will in the future provide the following:
+Spaces Global Tags creates two new multisite taxonomies. Both taxonomies are assigned to the `post` post-type. The first one `global_comment_tags` is storing `#tags` made in comments on the post. The second one `global_post_tags` allows post authors to create `#tags` while writing posts.
 
-* Global Tag archive pages
-* An overview of all tags
-* Allow tagging of in the P2 style aka adding #foo in the post_content.
+When using the frontend editor provided by [Spaces](https://kisd.de/en/spaces) it shows an autocompletion for existing tags and allows you to create new ones on the fly.
+
+Other notable features:
+
+* Global Tag archive pages `https://example.com/multitaxo/<taxonomy_name>/<tag_slug>`
+* Global Taxonomy archive pages `https://example.com/multitaxo/<taxonomy_name>/`
+* Allow tagging in the P2 style aka adding `#foo` in the `post_content` and `comment_text`.
 
 ## Installation ##
 
 Clone it, love it, hate it.
 
+1. Install the [Multisite Taxonomies](https://github.com/dol-lab/multisite-taxonomies) and network activate it.
+2. Install this plugin and network activate it.
+3. Find the taxonomies in the network admin.
+
 ## Frequently Asked Questions ##
 
 ### Does this replace the default tags in a WordPress multisite ###
 
-No. But it does disable them on posts.
+No. But it does disable them on the `post` object type.
 
 ### Is there a global search available ###
 
-No.
+No, not yet. It will be integrated with the Spaces search, but for now you will have to click on the tags to reach the archive pages.
+
+### I found a bug, where can I report it? ###
+
+Please check if the bug is already mentioned on the Github repository or [create a new issue](https://github.com/dol-lab/spaces-global-tags/issues).
+
+### Can it do X, could you add Y? ###
+
+For feature request, please head over to the [Github repository](https://github.com/dol-lab/spaces-global-tags/) and create a feature request or a pull request with your proposed feature.
+
+We can't guarantee to build or merge your feature request, so consider creating a companion plugin using the filters provided by our plugin.
+
+### Can I extend or change the behaviour of the plugin? ###
+
+Certainly, we provide a bunch of useful hooks and so does the [Multisite Taxonomies](https://github.com/dol-lab/multisite-taxonomies) plugin.
+
+* Filter `spaces_global_tags_archive_template_path`, change the path to the archive page template, default: `plugin_dir_path( __DIR__ ) . templates/template.php`.
+* Action `spaces_global_tags_below_archive_title`, change what is displayed below the archive title, defaults to related tags of the same taxonomy.
+* Filter `spaces_global_tags_post_types`, change the post types using the global taxonomies, defaults to `[ 'post' ]`.
+* Filter `spaces_global_tags_user_roles`, change the roles allowed to create and add tags, defaults to `[ 'administrator', 'editor', 'author' ]`.
+* Filter `spaces_global_tags_user_capabilities`, change the capabilities granted to the mentioned roles, defaults to `[ 'manage_multisite_terms', 'edit_multisite_terms', 'assign_multisite_terms' ]`.
+* Filter `spaces_global_tags_archive_path`, change the default path for the archive pages. In the context of spaces it's `/home/` otherwise the main network site.
+* Filter `spaces_global_tags_found_tags`, allows you to change the found tags in a text string (`post_content`, `comment_text`), defaults to array of found tags.
+* Filter `spaces_global_tags_tag_link`, allows you to change the link destination for the tag archive page.
 
 ## Screenshots ##
 
 ## Changelog ##
+
+### 0.17.0 ###
+Updated readme with more useful information
+Fixed a few typos in the code
+Updated inline documentation
 
 ### 0.16.0 ###
 Added a filter for roles to be allowed managing global tags.
