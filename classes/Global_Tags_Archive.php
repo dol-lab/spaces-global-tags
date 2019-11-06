@@ -167,7 +167,7 @@ class Global_Tags_Archive {
 	public function archive_pages_template_include( $template ) {
 
 		if ( is_multitaxo() ) {
-			$template = apply_filters( 'spages_global_tags_archive_template_path', plugin_dir_path( __DIR__ ) . 'templates/template.php' );
+			$template = apply_filters( 'spaces_global_tags_archive_template_path', plugin_dir_path( __DIR__ ) . 'templates/template.php' );
 		}
 
 		return $template;
