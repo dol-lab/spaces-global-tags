@@ -429,7 +429,6 @@ class Global_Tags_Archive {
 	 *
 	 * @access public
 	 * @param Multisite_Term $multisite_term The multisite term for which we display related terms.
-	 * @param boolean        $new_window Should the links open in a new window (true/false - default to false).
 	 * @return string The archive page content.
 	 */
 	public static function do_multisite_term_related_terms_list( $multisite_term ) {
