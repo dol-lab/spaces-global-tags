@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.3
-Stable tag: 0.17.0
+Stable tag: 0.18.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,10 +64,15 @@ Certainly, we provide a bunch of useful hooks and so does the [Multisite Taxonom
 * Filter `spaces_global_tags_archive_path`, change the default path for the archive pages. In the context of spaces it's `/home/` otherwise the main network site.
 * Filter `spaces_global_tags_found_tags`, allows you to change the found tags in a text string (`post_content`, `comment_text`), defaults to array of found tags.
 * Filter `spaces_global_tags_tag_link`, allows you to change the link destination for the tag archive page.
+* Filter `spaces_global_tags_number_of_related_tags`, allows you to change the number of other tags shown in the same taxonomy, default is `30`.
 
 == Screenshots ==
 
 == Changelog ==
+
+= 0.18.0 =
+Remove shortcodes from global tag archive excerpts.
+Only show a max. of 30 other tags on a tag term archive.
 
 = 0.17.0 =
 Updated readme with more useful information
