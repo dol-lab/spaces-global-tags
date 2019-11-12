@@ -433,7 +433,15 @@ class Global_Tags_Archive {
 	 */
 	public static function do_multisite_term_related_terms_list( $multisite_term ) {
 		// get the related topics.
-		$related_terms = get_multisite_terms( [ 'taxonomy' => $multisite_term->multisite_taxonomy ] );
+		$related_terms = get_multisite_terms(
+			[
+				'taxonomy' => $multisite_term->multisite_taxonomy,
+				'number'   => apply_filters(
+					'spaces_global_tags_number_of_related_tags',
+					30
+				),
+			]
+		);
 
 		// We start buffering the page content.
 		ob_start();
