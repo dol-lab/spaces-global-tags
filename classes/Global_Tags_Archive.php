@@ -304,7 +304,7 @@ class Global_Tags_Archive {
 			</div>
 			</div>
 
-<?php
+			<?php
 		else :
 			?>
 			<p class="exploreWidget"><?php esc_html_e( 'No topics to display.', 'spaces-global-tags' ); ?></a></p>
@@ -489,11 +489,11 @@ class Global_Tags_Archive {
 							<h4 class="card-title entry-title"><a href="<?php multitaxo_the_permalink( $post->post_permalink ); ?>" rel="bookmark" title="<?php echo esc_attr( __( 'Permalink to ', 'spaces-global-tags' ) . multitaxo_get_the_title( $post->post_title ) ); ?>"><?php multitaxo_the_title( $post->post_title ); ?></a></h4>
 						</header><!-- .entry-header -->
 						<div class="entry-summary post-content card-section s-fg-a-c1-parent post-excerpt">
-							<?php echo strip_shortcodes( multitaxo_get_the_excerpt( $post ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo preg_replace( '#\[[^\]]+\]#', '', multitaxo_get_the_excerpt( $post ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						</div><!-- .entry-summary -->
 					</article>
 					</div>
-<?php
+				<?php
 			endforeach; // Post loop.
 			// Get our generated page content.
 			$page_content = ob_get_clean();
