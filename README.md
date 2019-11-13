@@ -3,7 +3,7 @@
 **Tags:** multisite, wpmu, taxonomies  
 **Requires at least:** 4.5  
 **Tested up to:** 5.3  
-**Stable tag:** 0.18.0  
+**Stable tag:** 0.19.0  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -65,10 +65,16 @@ Certainly, we provide a bunch of useful hooks and so does the [Multisite Taxonom
 * Filter `spaces_global_tags_found_tags`, allows you to change the found tags in a text string (`post_content`, `comment_text`), defaults to array of found tags.
 * Filter `spaces_global_tags_tag_link`, allows you to change the link destination for the tag archive page.
 * Filter `spaces_global_tags_number_of_related_tags`, allows you to change the number of other tags shown in the same taxonomy, default is `30`.
+* Filter `spaces_global_tags_show_link_to_all_tags`, whether we show a link to all tags in a taxonomy on a term archive, default is `true`.
 
 ## Screenshots ##
 
 ## Changelog ##
+
+### 0.19.0 ###
+Show link to all tags in a taxonomy on the term archive page.
+Display posts per term on term archive page.
+Display posts per term on taxonomy archive page.
 
 ### 0.18.0 ###
 Remove shortcodes from global tag archive excerpts.
