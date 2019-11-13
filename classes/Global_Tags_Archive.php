@@ -294,7 +294,7 @@ class Global_Tags_Archive {
 					<ul class="topic-list">
 						<?php if ( is_array( $topics ) && ! empty( $topics ) ) : ?>
 							<?php foreach ( $topics as $topic ) : ?>
-								<li><a href="<?php echo esc_url( get_multisite_term_link( $topic->multisite_term_id, $topic->multisite_taxonomy ) ); ?>"><?php echo esc_attr( '#' . $topic->name ); ?></a></li>
+								<li><a href="<?php echo esc_url( get_multisite_term_link( $topic->multisite_term_id, $topic->multisite_taxonomy ) ); ?>"><?php echo esc_attr( '#' . $topic->name ) . esc_html( ' (' . $topic->count . ')' ); ?></a></li>
 							<?php endforeach; ?>
 						<?php endif; ?>
 					</ul>
@@ -432,6 +432,7 @@ class Global_Tags_Archive {
 	 * @return string The archive page content.
 	 */
 	public static function do_multisite_term_related_terms_list( $multisite_term ) {
+		global $wp;
 		// get the related topics.
 		$related_terms = get_multisite_terms(
 			[
@@ -448,15 +449,33 @@ class Global_Tags_Archive {
 		if ( is_array( $related_terms ) && ! empty( $related_terms ) ) :
 			?>
 			<div class="topic-block">
-				<h2 class="topic-letter"><?php esc_html_e( 'More Tags', 'spaces-global-tags' ); ?></h2>
+				<h2 class="topic-letter">
+				<?php
+					$taxonomy_label = get_multisite_taxonomy( $multisite_term->multisite_taxonomy )->label;
+					/* Translators: show the taxonomy name */
+					printf( esc_html__( 'More %s', 'spaces-global-tags' ), esc_html( $taxonomy_label ) );
+				?>
+				</h2>
 				<ul class="topic-list">
 					<?php foreach ( $related_terms as $related_multisite_term ) : ?>
 						<li class="<?php echo $multisite_term->name === $related_multisite_term->name ? 'current' : ''; ?>">
 							<a href="<?php echo esc_url( get_multisite_term_link( $related_multisite_term ) ); ?>">
-							<?php echo esc_html( '#' . $related_multisite_term->name ); ?>
+							<?php echo esc_html( '#' . $related_multisite_term->name ) . esc_html( ' (' . $related_multisite_term->count . ')' ); ?>
 							</a>
+
 						</li>
 					<?php endforeach; ?>
+					<?php
+					if ( true === apply_filters( 'spaces_global_tags_show_link_to_all_tags', true ) ) :
+						$taxonomy_url = home_url( $wp->request );
+						$taxonomy_url = str_replace( $multisite_term->slug, '', $taxonomy_url );
+
+						echo '<li class="current show-all"><a href="' . esc_url( $taxonomy_url ) . '">';
+							/* Translators: show the taxonomy name */
+							printf( esc_html__( 'All %s', 'spaces-global-tags' ), esc_html( $taxonomy_label ) );
+						echo '</a></li>';
+						endif;
+					?>
 				</ul>
 			</div>
 			<?php
