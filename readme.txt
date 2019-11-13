@@ -75,6 +75,7 @@ Certainly, we provide a bunch of useful hooks and so does the [Multisite Taxonom
 Show link to all tags in a taxonomy on the term archive page.
 Display posts per term on term archive page.
 Display posts per term on taxonomy archive page.
+Show tag list in a more condensed way.
 
 = 0.18.0 =
 Remove shortcodes from global tag archive excerpts.

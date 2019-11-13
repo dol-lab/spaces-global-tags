@@ -54,11 +54,8 @@
 .topic-list li a {
 	font-size: .875rem;
 	color: #ed624b;
-	padding: 4px;
+	padding: 2px 4px 2px 0;
 	display: block;
-}
-.topic-list li:first-child a {
-	padding-left: 0;
 }
 .topic-list li.current a {
 	font-weight: bold;
