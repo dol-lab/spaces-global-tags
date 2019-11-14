@@ -136,3 +136,14 @@
 	font-size: 1.1rem;
 	font-weight: normal;
 }
+
+/**
+	Custom CSS for the Global Tag Cloud widget.
+	@since 0.20.0
+ */
+.card-section.spaces-global-tags {
+	display: initial !important;
+}
+.card-section.spaces-global-tags > a:hover {
+	background-color: transparent;
+}

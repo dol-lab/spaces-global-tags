@@ -320,6 +320,27 @@ function register_global_comment_tag_taxonomy() {
 
 add_action( 'init', __NAMESPACE__ . '\register_global_comment_tag_taxonomy', 0 );
 
+/**
+ * Register custom plugin widgets with WordPress.
+ */
+function register_widgets() {
+	register_widget( '\\Spaces_Global_Tags\\Widget_Global_Tags' );
+}
+add_action( 'widgets_init', __NAMESPACE__ . '\register_widgets' );
+
+/**
+ * Add additional widgets to the list of widgets to cards items.
+ *
+ * @since 0.20.0
+ *
+ * @param  array $widgets list of default widgets.
+ * @return array $widgets list of widgets names.
+ */
+function widgets_to_cards_filter( $widgets ) {
+	$widgets[] = 'global_tag_cloud';
+	return $widgets;
+}
+add_filter( 'spaces_widget_to_cards_allowed_widgets', __NAMESPACE__ . '\widgets_to_cards_filter' );
 
 /**
  * Fix the multisite term archive link on subsites to point to the main site.
