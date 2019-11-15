@@ -57,7 +57,7 @@ class Widget_Global_Tags extends WP_Widget {
 
 		$show_count = ! empty( $instance['count'] );
 
-		$term_args = array(
+		$term_args = [
 			'taxonomy'   => $current_taxonomy,
 			'number'     => apply_filters( 'spaces_global_tags_number_of_related_tags', 30 ),
 			'orderby'    => 'count',
@@ -65,7 +65,8 @@ class Widget_Global_Tags extends WP_Widget {
 			'hide_empty' => true,
 			'echo'       => false,
 			'show_count' => $show_count,
-		);
+			'largest'    => 20,
+		];
 
 		// Make the multisite term cloud defaults editable.
 		$term_args = apply_filters( 'spaces_global_tags_term_cloud_args', $term_args );
