@@ -437,6 +437,8 @@ class Global_Tags_Archive {
 		$related_terms = get_multisite_terms(
 			[
 				'taxonomy' => $multisite_term->multisite_taxonomy,
+				'order'    => 'DESC',
+				'orderby'  => 'count',
 				'number'   => apply_filters(
 					'spaces_global_tags_number_of_related_tags',
 					30
