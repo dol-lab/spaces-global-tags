@@ -147,3 +147,6 @@
 .card-section.spaces-global-tags > a:hover {
 	background-color: transparent;
 }
+.card-section.spaces-global-tags > a::before {
+	content: '#';
+}
