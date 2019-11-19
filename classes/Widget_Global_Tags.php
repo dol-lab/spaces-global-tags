@@ -99,6 +99,11 @@ class Widget_Global_Tags extends WP_Widget {
 
 		echo $tag_cloud;
 
+		/**
+		 * Maybe show link to taxonomy archive page.
+		 *
+		 * @since 0.21.0
+		 */
 		if ( $instance['archive'] ) {
 			$base_url     = apply_filters( 'multisite_taxonomy_base_url_slug', 'multitaxo' );
 			$taxonomy_url = esc_url( trailingslashit( home_url( $base_url . '/' . $current_taxonomy ) ) );
@@ -161,6 +166,11 @@ class Widget_Global_Tags extends WP_Widget {
 			__( 'Show tag counts', 'spaces-global-tags' )
 		);
 
+		/**
+		 * Checkbox to show link to taxonomy archive page.
+		 *
+		 * @since 0.21.0
+		 */
 		$archive_checkbox = sprintf(
 			'<p><input type="checkbox" class="checkbox" id="%1$s" name="%2$s"%3$s /> <label for="%1$s">%4$s</label></p>',
 			$this->get_field_id( 'archive' ),
