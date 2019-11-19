@@ -47,7 +47,7 @@ class Widget_Global_Tags extends WP_Widget {
 		if ( ! empty( $instance['title'] ) ) {
 			$title = $instance['title'];
 		} else {
-			if ( 'post_tag' === $current_taxonomy ) {
+			if ( 'global_post_tag' === $current_taxonomy ) {
 				$title = __( 'Global Tags', 'spaces-global-tags' );
 			} else {
 				$tax   = get_multisite_taxonomy( $current_taxonomy );
