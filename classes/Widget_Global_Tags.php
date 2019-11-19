@@ -118,6 +118,7 @@ class Widget_Global_Tags extends WP_Widget {
 		$instance['title']    = sanitize_text_field( $new_instance['title'] );
 		$instance['count']    = ! empty( $new_instance['count'] ) ? 1 : 0;
 		$instance['taxonomy'] = stripslashes( $new_instance['taxonomy'] );
+		$instance['archive']  = ! empty( $new_instance['archive'] ) ? 1 : 0;
 		return $instance;
 	}
 
@@ -133,6 +134,7 @@ class Widget_Global_Tags extends WP_Widget {
 		$title_id          = $this->get_field_id( 'title' );
 		$count             = isset( $instance['count'] ) ? (bool) $instance['count'] : false;
 		$instance['title'] = ! empty( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+		$archive           = isset( $instance['archive'] ) ? (bool) $instance['archive'] : false;
 
 		echo '<p><label for="' . $title_id . '">' . __( 'Title:', 'spaces-global-tags' ) . '</label>
 			<input type="text" class="widefat" id="' . $title_id . '" name="' . $this->get_field_name( 'title' ) . '" value="' . $instance['title'] . '" />
@@ -151,6 +153,14 @@ class Widget_Global_Tags extends WP_Widget {
 			__( 'Show tag counts', 'spaces-global-tags' )
 		);
 
+		$archive_checkbox = sprintf(
+			'<p><input type="checkbox" class="checkbox" id="%1$s" name="%2$s"%3$s /> <label for="%1$s">%4$s</label></p>',
+			$this->get_field_id( 'archive' ),
+			$this->get_field_name( 'archive' ),
+			checked( $archive, true, false ),
+			__( 'Show link to all tags', 'spaces-global-tags' )
+		);
+
 		switch ( count( $taxonomies ) ) {
 
 			// No tag cloud supporting taxonomies found, display error message
@@ -165,6 +175,7 @@ class Widget_Global_Tags extends WP_Widget {
 				$taxonomy = reset( $keys );
 				printf( $input, esc_attr( $taxonomy ) );
 				echo $count_checkbox;
+				echo $archive_checkbox;
 				break;
 
 			// More than one tag cloud supporting taxonomy found, display a select.
@@ -187,6 +198,7 @@ class Widget_Global_Tags extends WP_Widget {
 				}
 
 				echo '</select></p>' . $count_checkbox;
+				echo $archive_checkbox;
 		}
 	}
 
