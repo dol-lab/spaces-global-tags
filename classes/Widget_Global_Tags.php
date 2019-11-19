@@ -99,7 +99,15 @@ class Widget_Global_Tags extends WP_Widget {
 
 		echo $tag_cloud;
 
+		if ( $instance['archive'] ) {
+			$base_url     = apply_filters( 'multisite_taxonomy_base_url_slug', 'multitaxo' );
+			$taxonomy_url = esc_url( trailingslashit( home_url( $base_url . '/' . $current_taxonomy ) ) );
+			$tax          = get_multisite_taxonomy( $current_taxonomy );
+			echo "<p><a href='{$taxonomy_url}'>" . sprintf( __( 'Show all %s', 'spaces-global-tags' ), $tax->labels->name ) . "</a></p>\n";
+		}
+
 		echo "</div>\n";
+
 		echo $args['after_widget'];
 	}
 
