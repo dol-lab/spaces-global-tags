@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.3
-Stable tag: 0.20.0
+Stable tag: 0.21.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,6 +71,10 @@ Certainly, we provide a bunch of useful hooks and so does the [Multisite Taxonom
 == Screenshots ==
 
 == Changelog ==
+
+= 0.21.0 =
+Add checkbox to widget form, to display link to taxonomy archive.
+Display link to taxonomy archive, if checkbox is checked.
 
 = 0.20.0 =
 First version of the global tag cloud widget.
