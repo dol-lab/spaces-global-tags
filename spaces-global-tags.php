@@ -2,12 +2,12 @@
 /**
  * Plugin Name:     Spaces Global Tags
  * Plugin URI:      https://github.com/dol-lab/spaces-global-tags/
- * Description:     WIP: Do not use yet. Experimental plugin to play around with Multisite Taxonomies.
+ * Description:     Adds global tags for posts and comments in a multisite installation. Uses the Multisite Taxonomies plugin to create taxonomies.
  * Author:          Silvan Hagen
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.21.0
+ * Version:         0.22.0
  * Network:         true
  *
  * @package         Spaces_Global_Tags
