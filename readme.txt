@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.3
-Stable tag: 0.21.0
+Stable tag: 0.22.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,88 +72,92 @@ Certainly, we provide a bunch of useful hooks and so does the [Multisite Taxonom
 
 == Changelog ==
 
+= 0.22.0 =
+* Add proper plugin description to plugin header.
+* Format changelog
+
 = 0.21.0 =
-Add checkbox to widget form, to display link to taxonomy archive.
-Display link to taxonomy archive, if checkbox is checked.
+* Add checkbox to widget form, to display link to taxonomy archive.
+* Display link to taxonomy archive, if checkbox is checked.
 
 = 0.20.0 =
-First version of the global tag cloud widget.
+* First version of the global tag cloud widget.
 
 = 0.19.0 =
-Show link to all tags in a taxonomy on the term archive page.
-Display posts per term on term archive page.
-Display posts per term on taxonomy archive page.
-Show tag list in a more condensed way.
+* Show link to all tags in a taxonomy on the term archive page.
+* Display posts per term on term archive page.
+* Display posts per term on taxonomy archive page.
+* Show tag list in a more condensed way.
 
 = 0.18.0 =
-Remove shortcodes from global tag archive excerpts.
-Only show a max. of 30 other tags on a tag term archive.
+* Remove shortcodes from global tag archive excerpts.
+* Only show a max. of 30 other tags on a tag term archive.
 
 = 0.17.0 =
-Updated readme with more useful information
-Fixed a few typos in the code
-Updated inline documentation
+* Updated readme with more useful information
+* Fixed a few typos in the code
+* Updated inline documentation
 
 = 0.16.0 =
-Added a filter for roles to be allowed managing global tags.
-Check and add capabilities to user roles so they can add and create global tags, fixes https://github.com/dol-lab/spaces-global-tags/issues/20
+* Added a filter for roles to be allowed managing global tags.
+* Check and add capabilities to user roles so they can add and create global tags, fixes https://github.com/dol-lab/spaces-global-tags/issues/20
 
 = 0.15.0 =
-Added a filter for post types with multisite taxonomies.
-Implemented a check for post type when finding tags in content, fixes https://github.com/dol-lab/spaces-global-tags/issues/18
+* Added a filter for post types with multisite taxonomies.
+* Implemented a check for post type when finding tags in content, fixes https://github.com/dol-lab/spaces-global-tags/issues/18
 
 = 0.14.0 =
-Removed a CSS class on the global tag archive template for production.
+* Removed a CSS class on the global tag archive template for production.
 
 = 0.13.0 =
-Added REST API endpoints for global comment and post tags.
-Added Tribute JS by ZURB to allow auto completion for tags.
-Implemented auto completion for CKEditor and comment forms.
+* Added REST API endpoints for global comment and post tags.
+* Added Tribute JS by ZURB to allow auto completion for tags.
+* Implemented auto completion for CKEditor and comment forms.
 
 = 0.12.0 =
-Changed approach for archive pages for now, using parts of https://github.com/HarvardChanSchool/multisite-taxonomies-frontend
+* Changed approach for archive pages for now, using parts of https://github.com/HarvardChanSchool/multisite-taxonomies-frontend
 
 = 0.11.0 =
-Added first spaces specific fixes for urls using spaces_options.
+* Added first spaces specific fixes for urls using spaces_options.
 
 = 0.10.0 =
-Fixed a bug to link to the proper multisite term archive page.
-First pass at filling the multisite term archive pages.
-Changed reusable strings to constants.
-Added GPL in plugin header.
+* Fixed a bug to link to the proper multisite term archive page.
+* First pass at filling the multisite term archive pages.
+* Changed reusable strings to constants.
+* Added GPL in plugin header.
 
 = 0.9.0 =
-Fixed a bug that prevented comment and post tags to be linked properly.
-Added implementation for global post tags to work in the same fashion as comment tags.
-Added README.md
-Added translation file.
+* Fixed a bug that prevented comment and post tags to be linked properly.
+* Added implementation for global post tags to work in the same fashion as comment tags.
+* Added README.md
+* Added translation file.
 
 = 0.8.0 =
-Add composer.json support.
-Implement PSR4 autoloader for classes.
-Add method to filter displayed comment/content with links to the tag archive pages.
-Implement logic for parsing and settings terms for posts in comments.
+* Add composer.json support.
+* Implement PSR4 autoloader for classes.
+* Add method to filter displayed comment/content with links to the tag archive pages.
+* Implement logic for parsing and settings terms for posts in comments.
 
 = 0.7.0 =
-Implement abstract class Hashtag_Parser.
-Setting up Post_Tags and Comment_Tags classes.
+* Implement abstract class Hashtag_Parser.
+* Setting up Post_Tags and Comment_Tags classes.
 
 = 0.6.0 =
-Remove `post_tag` from `post` object.
-Add `global_post_tag` to `post` object.
-Add `global_comment_tag` to `post` object.
+* Remove `post_tag` from `post` object.
+* Add `global_post_tag` to `post` object.
+* Add `global_comment_tag` to `post` object.
 
 = 0.5.0 =
-Started re-build on Multisite Taxonomies plugin.
+* Started re-build on Multisite Taxonomies plugin.
 
 = 0.4.0 =
-Moved uninstall flush_rewrite_rules to deactivation hook.
+* Moved uninstall flush_rewrite_rules to deactivation hook.
 
 = 0.3.0 =
-Implemented an uninstall.php file with a class to truly uninstall the plugin.
+* Implemented an uninstall.php file with a class to truly uninstall the plugin.
 
 = 0.2.0 =
-Added custom rewrite rules for global tag archive pages.
+* Added custom rewrite rules for global tag archive pages.
 
 = 0.1.0 =
-Initial version, very limited and only as a playground.
+* Initial version, very limited and only as a playground.
