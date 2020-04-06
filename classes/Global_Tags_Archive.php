@@ -43,7 +43,7 @@ class Global_Tags_Archive {
 		add_filter( 'the_content', [ $this, 'archive_pages_content' ] );
 
 		// Hack to avoid the content of archive pages to display multiple times.
-		add_filter( 'pre_get_posts', [ $this, 'filtering_posts' ] );
+		add_filter( 'pre_get_posts', [ $this, 'filtering_posts' ], 620 );
 
 		// Filter the title of archive pages.
 		add_filter( 'the_title', [ $this, 'archive_pages_title' ], 20, 2 );
