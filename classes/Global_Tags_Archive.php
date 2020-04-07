@@ -31,27 +31,27 @@ class Global_Tags_Archive {
 	public function register() {
 
 		// Add archive pages related query vars.
-		add_filter( 'query_vars', [ $this, 'archive_pages_query_vars' ] );
+		add_filter( 'query_vars', array( $this, 'archive_pages_query_vars' ) );
 
 		// Add rewrite rules for the archive pages.
-		add_action( 'init', [ $this, 'add_archive_pages_rewrite_rules' ] );
+		add_action( 'init', array( $this, 'add_archive_pages_rewrite_rules' ) );
 
 		// Use the page template for our archive pages.
-		add_filter( 'template_include', [ $this, 'archive_pages_template_include' ] );
+		add_filter( 'template_include', array( $this, 'archive_pages_template_include' ) );
 
 		// When needed we inject the content of our archive pages.
-		add_filter( 'the_content', [ $this, 'archive_pages_content' ] );
+		add_filter( 'the_content', array( $this, 'archive_pages_content' ) );
 
 		// Hack to avoid the content of archive pages to display multiple times.
-		add_filter( 'pre_get_posts', [ $this, 'filtering_posts' ], 620 );
+		add_filter( 'pre_get_posts', array( $this, 'filtering_posts' ), 620 );
 
 		// Filter the title of archive pages.
-		add_filter( 'the_title', [ $this, 'archive_pages_title' ], 20, 2 );
+		add_filter( 'the_title', array( $this, 'archive_pages_title' ), 20, 2 );
 
 		// Filter for the body class for the archive pages.
-		add_filter( 'body_class', [ $this, 'archive_pages_body_class' ] );
+		add_filter( 'body_class', array( $this, 'archive_pages_body_class' ) );
 
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_styles_and_scripts' ] );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles_and_scripts' ) );
 	}
 
 	/**
@@ -60,8 +60,8 @@ class Global_Tags_Archive {
 	 * @return void
 	 */
 	public function enqueue_styles_and_scripts() {
-		wp_enqueue_script( 'hsph-plugin-tagging', SPACES_GLOBAL_TAGS_ASSETS_URL . '/js/hsph-plugin-tagging.js', [ 'jquery' ], get_plugin_version(), true );
-		wp_enqueue_style( 'hsph-plugin-tagging-topics-pages', SPACES_GLOBAL_TAGS_ASSETS_URL . '/css/topics.css', [], get_plugin_version() );
+		wp_enqueue_script( 'hsph-plugin-tagging', SPACES_GLOBAL_TAGS_ASSETS_URL . '/js/hsph-plugin-tagging.js', array( 'jquery' ), get_plugin_version(), true );
+		wp_enqueue_style( 'hsph-plugin-tagging-topics-pages', SPACES_GLOBAL_TAGS_ASSETS_URL . '/css/topics.css', array(), get_plugin_version() );
 	}
 
 	/**
@@ -435,7 +435,7 @@ class Global_Tags_Archive {
 		global $wp;
 		// get the related topics.
 		$related_terms = get_multisite_terms(
-			[
+			array(
 				'taxonomy' => $multisite_term->multisite_taxonomy,
 				'order'    => 'DESC',
 				'orderby'  => 'count',
@@ -443,7 +443,7 @@ class Global_Tags_Archive {
 					'spaces_global_tags_number_of_related_tags',
 					30
 				),
-			]
+			)
 		);
 
 		// We start buffering the page content.
