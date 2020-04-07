@@ -38,12 +38,12 @@ class Post_Tags extends Hashtag_Parser {
 	 */
 	public function register() {
 
-		add_action( 'wp_insert_post', [ $this, 'process_tags' ], 15, 3 );
+		add_action( 'wp_insert_post', array( $this, 'process_tags' ), 15, 3 );
 
 		/**
 		 * When displaying a tag, update the markup with a link to the tag.
 		 */
-		add_filter( 'the_content', [ '\Spaces_Global_Tags\Post_Tags', 'tag_post_links' ], 15 );
+		add_filter( 'the_content', array( '\Spaces_Global_Tags\Post_Tags', 'tag_post_links' ), 15 );
 
 	}
 
@@ -94,7 +94,7 @@ class Post_Tags extends Hashtag_Parser {
 		 *
 		 * @since 0.15.0
 		 */
-		if ( ! in_array( get_post_type( $post_id ), apply_filters( 'spaces_global_tags_post_types', [ 'post' ] ) ) ) {
+		if ( ! in_array( get_post_type( $post_id ), apply_filters( 'spaces_global_tags_post_types', array( 'post' ) ) ) ) {
 			return;
 		}
 

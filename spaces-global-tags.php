@@ -130,7 +130,7 @@ function maybe_add_caps() {
 		/**
 		 * Filterable roles to grant capabilities for using global tags.
 		 */
-		$roles = apply_filters( 'spaces_global_tags_user_roles', [ 'administrator', 'editor', 'author' ] );
+		$roles = apply_filters( 'spaces_global_tags_user_roles', array( 'administrator', 'editor', 'author' ) );
 
 		/**
 		 * Filterable capabilities to be granted. See multisite_taxomomies/inc/class-multisite-taxonomy.php
@@ -142,7 +142,7 @@ function maybe_add_caps() {
 		 *      assign_multisite_terms
 		 *      delete_multisite_terms (we don't grant this capability to users, only super admins)
 		 */
-		$caps = apply_filters( 'spaces_global_tags_user_capabilities', [ 'manage_multisite_terms', 'edit_multisite_terms', 'assign_multisite_terms' ] );
+		$caps = apply_filters( 'spaces_global_tags_user_capabilities', array( 'manage_multisite_terms', 'edit_multisite_terms', 'assign_multisite_terms' ) );
 
 		/**
 		 * Assign capabilities to each role.
@@ -234,7 +234,7 @@ function register_global_post_tag_taxonomy() {
 	/**
 	 * Load taxonomy for Tags
 	 */
-	$labels = [
+	$labels = array(
 		'name'                       => __( 'Post Tags', 'spaces-global-tags' ),
 		'singular_name'              => __( 'Post Tag', 'spaces-global-tags' ),
 		'menu_name'                  => __( 'Post Tags', 'spaces-global-tags' ),
@@ -254,15 +254,15 @@ function register_global_post_tag_taxonomy() {
 		'most_used'                  => __( 'Most Used', 'spaces-global-tags' ),
 		'items_list'                 => __( 'Post Tags list', 'spaces-global-tags' ),
 		'items_list_navigation'      => __( 'Post Tags list navigation', 'spaces-global-tags' ),
-	];
+	);
 
-	$args = [
+	$args = array(
 		'public'       => true,
 		'labels'       => $labels,
 		'hierarchical' => false,
-	];
+	);
 
-	$post_types = apply_filters( 'spaces_global_tags_post_types', [ 'post' ] );
+	$post_types = apply_filters( 'spaces_global_tags_post_types', array( 'post' ) );
 	register_multisite_taxonomy( GLOBAL_POST_TAG_TAX, $post_types, $args );
 
 	new Post_Tags();
@@ -284,7 +284,7 @@ function register_global_comment_tag_taxonomy() {
 	/**
 	 * Load taxonomy for Tags
 	 */
-	$labels = [
+	$labels = array(
 		'name'                       => __( 'Comment Tags', 'spaces-global-tags' ),
 		'singular_name'              => __( 'Comment Tag', 'spaces-global-tags' ),
 		'menu_name'                  => __( 'Comment Tags', 'spaces-global-tags' ),
@@ -304,15 +304,15 @@ function register_global_comment_tag_taxonomy() {
 		'most_used'                  => __( 'Most Used', 'spaces-global-tags' ),
 		'items_list'                 => __( 'Comment Tags list', 'spaces-global-tags' ),
 		'items_list_navigation'      => __( 'Comment Tags list navigation', 'spaces-global-tags' ),
-	];
+	);
 
-	$args = [
+	$args = array(
 		'public'       => true,
 		'labels'       => $labels,
 		'hierarchical' => false,
-	];
+	);
 
-	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', [ 'post' ] );
+	$post_types = apply_filters( 'multisite_taxonomy_tags_post_types', array( 'post' ) );
 	register_multisite_taxonomy( GLOBAL_COMMENT_TAG_TAX, $post_types, $args );
 
 	new Comment_Tags();
@@ -505,16 +505,16 @@ add_filter(
 add_action(
 	'rest_api_init',
 	function() {
-		$multisite_taxonomies = get_multisite_taxonomies( [], 'objects' );
+		$multisite_taxonomies = get_multisite_taxonomies( array(), 'objects' );
 
 		foreach ( $multisite_taxonomies as $multisite_taxonomy ) {
 			register_rest_route(
 				'multitaxo/v1',
 				$multisite_taxonomy->name,
-				[
+				array(
 					'methods'  => 'GET',
 					'callback' => __NAMESPACE__ . "\\get_{$multisite_taxonomy->name}_items",
-				]
+				)
 			);
 		}
 
@@ -531,20 +531,20 @@ add_action(
  */
 function get_global_tag_items( $taxonomy ) {
 	$terms = get_multisite_terms(
-		[
+		array(
 			'taxonomy'   => $taxonomy,
 			'fields'     => 'id=>name',
 			'hide_empty' => false,
-		]
+		)
 	);
 
-	$terms_array = [];
+	$terms_array = array();
 
 	foreach ( $terms as $key => $value ) {
-		$terms_array[] = [
+		$terms_array[] = array(
 			'id'   => $key,
 			'name' => $value,
-		];
+		);
 	}
 
 	return $terms_array;
@@ -581,12 +581,12 @@ function autocomplete_scripts() {
 	wp_localize_script(
 		'spaces-global-tags',
 		'SpacesGlobalTags',
-		[
-			'routes' => [
+		array(
+			'routes' => array(
 				'commentTags' => get_rest_url( null, 'multitaxo/v1/global_comment_tag' ),
 				'postTags'    => get_rest_url( null, 'multitaxo/v1/global_post_tag' ),
-			],
-		]
+			),
+		)
 	);
 }
 
@@ -595,7 +595,7 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\autocomplete_scripts' );
 /*-------------------------------------------------  Tiny helpers ----------------------------------------------------*/
 
 // Array for all the hooks.
-$debug_tags = [];
+$debug_tags = array();
 
 /**
  * Simple debug function to display all the hooks run on the page.

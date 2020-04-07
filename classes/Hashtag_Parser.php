@@ -39,10 +39,10 @@ abstract class Hashtag_Parser {
 
 		$xpath = new DOMXPath( $dom );
 
-		return [
+		return array(
 			'xpath' => $xpath->query( '//text()' ),
 			'dom'   => $dom,
-		];
+		);
 	}
 
 	/**
@@ -59,7 +59,7 @@ abstract class Hashtag_Parser {
 		 *
 		 * @var array $tags
 		 */
-		$tags = [];
+		$tags = array();
 
 		$document = self::setup_content( $content );
 
@@ -71,12 +71,12 @@ abstract class Hashtag_Parser {
 			}
 			$parent = $textNode;
 			while ( $parent ) {
-				if ( ! empty( $parent->tagName ) && in_array( strtolower( $parent->tagName ), [ 'pre', 'code', 'a', 'script', 'style', 'head' ] ) ) {
+				if ( ! empty( $parent->tagName ) && in_array( strtolower( $parent->tagName ), array( 'pre', 'code', 'a', 'script', 'style', 'head' ) ) ) {
 					continue 2;
 				}
 				$parent = $parent->parentNode;
 			}
-			$matches = [];
+			$matches = array();
 			if ( preg_match_all( self::TAGS_REGEX, $textNode->nodeValue, $matches ) ) {
 				$tags = array_merge( $tags, $matches[1] );
 			}
@@ -105,14 +105,14 @@ abstract class Hashtag_Parser {
 
 		$tags = array_unique( $tags );
 
-		usort( $tags, [ '\Spaces_Global_Tags\Hashtag_Parser', 'sortByLength' ] );
+		usort( $tags, array( '\Spaces_Global_Tags\Hashtag_Parser', 'sortByLength' ) );
 
 		/**
 		 * TODO: Maybe make them static again, but then we would have to clear out whenever the taxonomy changes.
 		 */
-		$tag_links = [];
+		$tag_links = array();
 
-		$tag_info = [];
+		$tag_info = array();
 
 		foreach ( $tags as $tag ) {
 			if ( isset( $tag_info[ $tag ] ) ) {

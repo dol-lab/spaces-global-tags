@@ -35,13 +35,13 @@ class Comment_Tags extends Hashtag_Parser {
 	 */
 	public function register() {
 
-		add_action( 'wp_insert_comment', [ $this, 'update_comment' ] );
-		add_action( 'edit_comment', [ $this, 'update_comment' ] );
+		add_action( 'wp_insert_comment', array( $this, 'update_comment' ) );
+		add_action( 'edit_comment', array( $this, 'update_comment' ) );
 
 		/**
 		 * When displaying a tag, update the markup with a link to the tag.
 		 */
-		add_filter( 'comment_text', [ '\Spaces_Global_Tags\Comment_Tags', 'tag_comment_links' ], 15 );
+		add_filter( 'comment_text', array( '\Spaces_Global_Tags\Comment_Tags', 'tag_comment_links' ), 15 );
 	}
 
 	/**

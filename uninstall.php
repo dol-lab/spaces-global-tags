@@ -19,7 +19,6 @@ class Spaces_Global_Tags_Uninstaller {
 	 * Perform some checks to make sure plugin can/should be uninstalled
 	 *
 	 * @since 0.3.0
-	 * @return Spaces_Global_Tags_Uninstaller
 	 */
 	public function __construct() {
 

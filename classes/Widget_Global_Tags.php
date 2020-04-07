@@ -57,7 +57,7 @@ class Widget_Global_Tags extends WP_Widget {
 
 		$show_count = ! empty( $instance['count'] );
 
-		$term_args = [
+		$term_args = array(
 			'taxonomy'   => $current_taxonomy,
 			'number'     => apply_filters( 'spaces_global_tags_number_of_related_tags', 30 ),
 			'orderby'    => 'count',
@@ -66,7 +66,7 @@ class Widget_Global_Tags extends WP_Widget {
 			'echo'       => false,
 			'show_count' => $show_count,
 			'largest'    => 20,
-		];
+		);
 
 		// Make the multisite term cloud defaults editable.
 		$term_args = apply_filters( 'spaces_global_tags_term_cloud_args', $term_args );
@@ -153,7 +153,7 @@ class Widget_Global_Tags extends WP_Widget {
 			<input type="text" class="widefat" id="' . $title_id . '" name="' . $this->get_field_name( 'title' ) . '" value="' . $instance['title'] . '" />
 		</p>';
 
-		$taxonomies = get_multisite_taxonomies( [], 'object' );
+		$taxonomies = get_multisite_taxonomies( array(), 'object' );
 		$id         = $this->get_field_id( 'taxonomy' );
 		$name       = $this->get_field_name( 'taxonomy' );
 		$input      = '<input type="hidden" id="' . $id . '" name="' . $name . '" value="%s" />';
