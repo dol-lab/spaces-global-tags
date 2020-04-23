@@ -48,19 +48,23 @@ let tributeConfig = {
 /**
  * Tribute for comment Tags.
  */
+/*
 let tributeComments = new Tribute(
 	Object.assign(
 		tributeConfig,
 		{ values: function(url, cb) { remoteSearch( SpacesGlobalTags.routes.commentTags, tags => cb( tags ) ); } }
 	)
 );
+*/
 
 /**
  * Attach Tribute for comments to the comment field in WordPress.
  */
+/*
 if ( document.body.contains( document.getElementById( "comment" ) ) ) {
 	tributeComments.attach( document.getElementById( "comment" ) );
 }
+*/
 
 /**
  * Tribute for post Tags.
@@ -77,8 +81,10 @@ let tributePosts = new Tribute(
  */
 document.addEventListener(
 	'onEditorReady',
-	function() {
-		tributePosts.attach( document.querySelector( "[data-type=post] .ck-editor__editable_inline" ) );
+	function( e ) {
+		if ( document.querySelector( "[data-type=post] .ck-editor__editable_inline" ) ) {
+			tributePosts.attach( document.querySelector( "[data-type=post] .ck-editor__editable_inline" ) );
+		}
 	},
 	false
 );
