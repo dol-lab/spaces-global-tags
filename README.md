@@ -2,8 +2,8 @@
 **Contributors:** neverything  
 **Tags:** multisite, wpmu, taxonomies  
 **Requires at least:** 4.5  
-**Tested up to:** 5.3  
-**Stable tag:** 0.22.0  
+**Tested up to:** 5.4  
+**Stable tag:** 0.22.1  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -71,6 +71,9 @@ Certainly, we provide a bunch of useful hooks and so does the [Multisite Taxonom
 ## Screenshots ##
 
 ## Changelog ##
+
+### 0.22.1 ###
+* Disable comment tags for now, will add them again later when comment editor is more mature.
 
 ### 0.22.0 ###
 * Add proper plugin description to plugin header.
