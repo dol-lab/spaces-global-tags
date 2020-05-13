@@ -583,8 +583,8 @@ function autocomplete_scripts() {
 		'SpacesGlobalTags',
 		array(
 			'routes' => array(
-				'commentTags' => get_rest_url( null, 'multitaxo/v1/global_comment_tag' ),
-				'postTags'    => get_rest_url( null, 'multitaxo/v1/global_post_tag' ),
+				'commentTags' => get_rest_url( null, 'multitaxo/v1/' . GLOBAL_COMMENT_TAG_TAX ),
+				'postTags'    => get_rest_url( null, 'multitaxo/v1/' . GLOBAL_POST_TAG_TAX ),
 			),
 		)
 	);
