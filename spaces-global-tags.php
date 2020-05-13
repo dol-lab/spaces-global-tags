@@ -98,10 +98,6 @@ function plugin_activate() {
 	if ( ! is_multisite() ) {
 		set_transient( 'spaces_global_tags_not_multisite', true, 5 );
 	}
-
-	if ( ! class_exists( 'Multitaxo_Plugin' ) ) {
-		set_transient( 'spaces_global_tags_missing_dependency', true, 5 );
-	}
 }
 
 /**
@@ -111,6 +107,55 @@ function plugin_activate() {
  */
 function plugin_deactivate() {
 	flush_rewrite_rules();
+}
+
+/**
+ * Check if the plugin we depend on is activated.
+ *
+ * @see https://gist.github.com/mathetos/7161f6a88108aaede32a
+ * @since 0.22.2
+ */
+function child_plugin_init() {
+	/**
+	 * Check for user caps and if our parent plugin exists.
+	 */
+	if ( current_user_can( 'activate_plugins' ) && ! class_exists( 'Multitaxo_Plugin' ) ) {
+		add_action( 'admin_init', __NAMESPACE__ . '\plugin_init_deactivate' );
+		add_action( 'network_admin_notices', __NAMESPACE__ . '\plugin_admin_notice' );
+	}
+}
+
+add_action( 'plugins_loaded', __NAMESPACE__ . '\child_plugin_init' );
+
+/**
+ * Deactivate this plugin if the parent plugin isn't activated.
+ *
+ * @since 0.22.2
+ */
+function plugin_init_deactivate() {
+	deactivate_plugins( plugin_basename( __FILE__ ), false, true );
+}
+
+/**
+ * Notice for missing parent plugin activation.
+ *
+ * @since 0.22.2
+ */
+function plugin_admin_notice() {
+	$child_plugin  = __( 'Spaces Global Tags', 'spaces-global-tags' );
+	$parent_plugin = __( 'Multisite Taxonomies', 'spaces-global-tags' );
+
+	echo '<div class="error"><p>'
+		. sprintf(
+			__( '%1$s requires %2$s to function correctly. Please activate %2$s before activating %1$s. For now, the plugin has been deactivated.', 'spaces-global-tags' ),
+			'<strong>' . esc_html( $child_plugin ) . '</strong>',
+			'<strong>' . esc_html( $parent_plugin ) . '</strong>'
+		)
+		. '</p></div>';
+
+	if ( isset( $_GET['activate'] ) ) {
+		unset( $_GET['activate'] );
+	}
 }
 
 /**
@@ -179,15 +224,6 @@ function check_dependencies() {
 		</div>
 		<?php
 		delete_transient( 'spaces_global_tags_not_multisite' );
-	}
-
-	if ( get_transient( 'spaces_global_tags_missing_dependency' ) ) {
-		?>
-		<div class="notice-error notice is-dismissible">
-			<p><?php echo esc_html_x( 'This plugin needs the Multisite Taxonomies plugin to work properly.', 'network admin notice on activation', 'spaces-global-tags' ); ?></p>
-		</div>
-		<?php
-		delete_transient( 'spaces_global_tags_missing_dependency' );
 	}
 }
 
@@ -480,6 +516,11 @@ function is_multisite_taxonomies() {
 	}
 }
 
+/**
+ * Helper to return the current version of a plugin.
+ *
+ * @return int $version current version found in plugin header.
+ */
 function get_plugin_version() {
 	$version = 0;
 	if ( function_exists( 'get_plugin_data' ) ) {
