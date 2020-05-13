@@ -557,7 +557,7 @@ function get_global_tag_items( $taxonomy ) {
  */
 function get_global_post_tag_items() {
 
-	return new WP_REST_Response( get_global_tag_items( 'global_post_tag' ) );
+	return new WP_REST_Response( get_global_tag_items( GLOBAL_POST_TAG_TAX ) );
 }
 
 /**
@@ -566,7 +566,7 @@ function get_global_post_tag_items() {
  * @return WP_REST_Response
  */
 function get_global_comment_tag_items() {
-	return new WP_REST_Response( get_global_tag_items( 'global_comment_tag' ) );
+	return new WP_REST_Response( get_global_tag_items( GLOBAL_COMMENT_TAG_TAX ) );
 }
 
 /**
