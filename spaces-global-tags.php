@@ -240,8 +240,13 @@ add_action( 'network_admin_notices', __NAMESPACE__ . '\check_dependencies' );
 function flush_rewrite_rules_maybe() {
 
 	if ( get_option( 'spaces_global_tags_flush_rewrite_rules_flag' ) ) {
-		flush_rewrite_rules();
-		delete_option( 'spaces_global_tags_flush_rewrite_rules_flag' );
+		if ( is_spaces_install() ) {
+			$blog_id = get_blog_details( get_archive_path() )->id;
+			switch_to_blog( $blog_id );
+			delete_option( 'rewrite_rules' );
+			restore_current_blog();
+			delete_option( 'spaces_global_tags_flush_rewrite_rules_flag' );
+		}
 	}
 }
 
