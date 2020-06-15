@@ -597,7 +597,6 @@ function get_global_tag_items( $taxonomy ) {
  * @return WP_REST_Response
  */
 function get_global_post_tag_items() {
-
 	return new WP_REST_Response( get_global_tag_items( GLOBAL_POST_TAG_TAX ) );
 }
 
