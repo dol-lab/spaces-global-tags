@@ -449,7 +449,6 @@ function get_archive_path() {
  * @return bool
  */
 function is_spaces_install() {
-
 	return class_exists( '\Spaces_Setup' );
 }
 
