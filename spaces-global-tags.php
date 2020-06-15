@@ -211,7 +211,7 @@ add_action( 'init', __NAMESPACE__ . '\maybe_add_caps', 0 );
 /**
  * Checks if during activation any transients were set.
  *
- * Adds dismissable error notices, in case it's not a
+ * Adds dismissible error notices, in case it's not a
  * multisite or the necessary dependencies don't exists.
  *
  * @since 0.1.0
