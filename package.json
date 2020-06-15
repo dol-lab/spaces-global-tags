@@ -1,6 +1,6 @@
 {
   "name": "spaces-global-tags",
-  "version": "0.22.2",
+  "version": "0.22.3",
   "repository": "https://github.com/dol-lab/spaces-global-tags",
   "license": "GPL-2.0-or-later",
   "main": "Gruntfile.js",

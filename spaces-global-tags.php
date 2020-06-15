@@ -7,7 +7,7 @@
  * Author URI:      https://silvanhagen.com
  * Text Domain:     spaces-global-tags
  * Domain Path:     /languages
- * Version:         0.22.2
+ * Version:         0.22.3
  * Network:         true
  *
  * @package         Spaces_Global_Tags

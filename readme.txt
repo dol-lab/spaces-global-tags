@@ -3,7 +3,7 @@ Contributors: neverything
 Tags: multisite, wpmu, taxonomies
 Requires at least: 4.5
 Tested up to: 5.4.1
-Stable tag: 0.22.2
+Stable tag: 0.22.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,6 +71,10 @@ Certainly, we provide a bunch of useful hooks and so does the [Multisite Taxonom
 == Screenshots ==
 
 == Changelog ==
+
+= 0.22.3 =
+* Code styling and typos in comments.
+* Fix permalinks for global archive page in Spaces installs, fixes https://github.com/dol-lab/spaces-global-tags/issues/36
 
 = 0.22.2 =
 * Spring cleaning: Replace hard-coded strings with existing constants.
