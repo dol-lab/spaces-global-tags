@@ -147,6 +147,7 @@ function plugin_admin_notice() {
 
 	echo '<div class="error"><p>'
 		. sprintf(
+			/* translators: Message when the parent plugin isn't active and therefore our plugin can't be activated. */
 			__( '%1$s requires %2$s to function correctly. Please activate %2$s before activating %1$s. For now, the plugin has been deactivated.', 'spaces-global-tags' ),
 			'<strong>' . esc_html( $child_plugin ) . '</strong>',
 			'<strong>' . esc_html( $parent_plugin ) . '</strong>'
