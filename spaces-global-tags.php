@@ -195,6 +195,9 @@ function maybe_add_caps() {
 		 */
 		foreach ( $roles as $role_name ) {
 			$role = get_role( $role_name );
+			if ( ! $role ) {
+				continue;
+			}
 			foreach ( $caps as $cap ) {
 				$role->add_cap( $cap );
 			}
